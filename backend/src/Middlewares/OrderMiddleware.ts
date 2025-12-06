@@ -1,0 +1,10 @@
+import { body, param } from "express-validator";
+
+export const OrderProductsRules = [
+    body("products").isArray().withMessage("Products must be an array"),
+    body("products.*.product").isEmpty().withMessage("Product is required"),
+    body("products.*.quantity").isNumeric().withMessage("Quantity must be a number"),
+    body("products.*.quantity").custom((value) => value >= 0).withMessage("Quantity must be greater than or equal to 0"),
+    body("total_amount").isNumeric().withMessage("Total amount must be a number"),
+    body("payment_method").isIn(["cash", "latin card", "debit card", "credit card"]).withMessage("Payment method is not valid"),
+]

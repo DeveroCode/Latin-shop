@@ -1,0 +1,104 @@
+import Product from '../Models/Product';
+import User from '../Models/User';
+import Order, { methods } from '../Models/Order';
+import { Request, Response } from 'express';
+import { isValidPaymentMethod } from '../utils';
+import { handlePayment } from '../services/payment.service';
+import { NotificationService } from '../services/notification.service';
+import { NotificationsType } from '../utils/notificationsType';
+import { log } from 'console';
+
+
+export class OrdersController {
+    static createOrder = async (req: Request, res: Response) => {
+        const { id } = req.user;
+        const { products, total_amount, payment_method, cardInfo } = req.body;
+        try {
+            if (!isValidPaymentMethod(payment_method)) {
+                const error = new Error('Invalid payment method');
+                return res.status(404).json({ error: error.message });
+            }
+
+            // Find the products and check if the user owns them
+            const productsIds = products.map((p: any) => p.product);
+            const findProduct = await Product.find({ _id: { $in: productsIds } });
+            const ownedProducts = findProduct.some((product) => product.user.toString() === id);
+
+            const sellersId = findProduct[0].user.toString();
+            const sellers = await User.findById(sellersId);
+
+            if (ownedProducts) {
+                const error = new Error('You cannot buy your own products');
+                return res.status(404).json({ error: error.message });
+            } else {
+                const payment = await handlePayment(payment_method, total_amount, cardInfo);
+
+                if (!payment.success) {
+                    const error = new Error('Payment failed');
+                    return res.status(404).json({ error: error.message });
+                }
+
+                const order = await Order.create({
+                    user: id,
+                    products: products.map((p: any) => ({
+                        product: p.product,
+                        sellerId: sellers._id,
+                        quantity: p.quantity,
+                        price: p.price
+                    })),
+                    total_amount,
+                    is_payment: payment_method !== methods.CASH,
+                    payment_method,
+                });
+
+                await NotificationService.createAndSend(sellersId, {
+                    type: NotificationsType.NEW_ORDER,
+                    title: 'New order',
+                    message: `Hello ${sellers.name}, you received a new order. Hurry up, check it out!`,
+                    orderId: order._id.toString(),
+                    user: sellersId,
+                    createdAt: new Date()
+                });
+
+
+                return res.status(200).json({
+                    message: 'Order created successfully'
+                })
+            }
+
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
+    static getOrders = async (req: Request, res: Response) => {
+        const { _id } = req.user;
+        try {
+            const orders = await Order.find({ products: { $elemMatch: { sellerId: _id } } })
+                .select('user products createdAt is_payment total_amount')
+                .populate("user", "name email last_name -_id")
+                .populate("products.product", "images brand name price -_id")
+                .sort({ createdAt: -1 })
+                .lean();
+
+            orders.forEach(order => {
+                order.products = order.products.map(p => {
+                delete p.sellerId;
+                return p;
+            });
+
+            })
+
+            if (!orders) {
+                const error = new Error('Orders not found');
+                return res.status(404).json({ error: error.message });
+            }
+
+            return res.status(200).json({ orders });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+}
