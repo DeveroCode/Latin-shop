@@ -77,7 +77,7 @@ export class OrdersController {
         try {
             const orders = await Order.find({ products: { $elemMatch: { sellerId: _id } } })
                 .select('user products createdAt is_payment total_amount')
-                .populate("user", "name email last_name -_id")
+                .populate("user", "name email last_name image -_id")
                 .populate("products.product", "images brand name price -_id")
                 .sort({ createdAt: -1 })
                 .lean();
