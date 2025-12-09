@@ -151,7 +151,8 @@ export const orderSchema = z.object({
             user: z.object({
                 name: z.string(),
                 last_name: z.string(),
-                email: z.string()
+                email: z.string(),
+                image: z.string()
             }),
             products: z.array(
                 z.object({
