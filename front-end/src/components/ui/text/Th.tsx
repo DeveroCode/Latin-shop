@@ -5,5 +5,5 @@ interface ThProps {
 }
 
 export default function Th({children}: ThProps) {
-  return<th className="text-gray-400 capitalize tracking-wide font-semibold pt-5 py-3">{children}</th>
+  return<th className="text-gray-800 capitalize text-sm">{children}</th>
 }

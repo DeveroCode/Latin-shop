@@ -152,6 +152,7 @@ export const orderSchema = z.object({
                 name: z.string(),
                 last_name: z.string(),
                 email: z.string(),
+                address: z.string(),
                 image: z.string()
             }),
             products: z.array(
@@ -176,6 +177,18 @@ export const orderSchema = z.object({
 
 export type Order = z.infer<typeof orderSchema>["orders"][number];
 export type Orders = Order[];
+export type OrdersPFD =
+  Pick<Order, '_id' | 'total_amount'> & {
+    user: Pick<Order['user'], 'name' | 'last_name' | 'address'>;
+    products: {
+      product: Pick<
+        Order['products'][number]['product'],
+        'name' | 'brand' | 'price'
+      >;
+      quantity: Order['products'][number]['quantity'];
+    }[];
+};
+
 
 /** Notifications */
 export const notificationsSchema = z.object({

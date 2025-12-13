@@ -8,3 +8,11 @@ export const OrderProductsRules = [
     body("total_amount").isNumeric().withMessage("Total amount must be a number"),
     body("payment_method").isIn(["cash", "latin card", "debit card", "credit card"]).withMessage("Payment method is not valid"),
 ]
+export const deleteManyOrders = [
+  body("ordersId")
+    .isArray()
+    .withMessage("Order IDs must be an array"),
+  body("ordersId.*")
+    .isString()
+    .withMessage("Order ID must be a string"),
+]

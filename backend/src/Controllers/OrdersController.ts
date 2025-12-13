@@ -77,16 +77,16 @@ export class OrdersController {
         try {
             const orders = await Order.find({ products: { $elemMatch: { sellerId: _id } } })
                 .select('user products createdAt is_payment total_amount')
-                .populate("user", "name email last_name image -_id")
+                .populate("user", "name email last_name image address -_id")
                 .populate("products.product", "images brand name price -_id")
                 .sort({ createdAt: -1 })
                 .lean();
 
             orders.forEach(order => {
                 order.products = order.products.map(p => {
-                delete p.sellerId;
-                return p;
-            });
+                    delete p.sellerId;
+                    return p;
+                });
 
             })
 
@@ -96,6 +96,27 @@ export class OrdersController {
             }
 
             return res.status(200).json({ orders });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
+    static deleteManyOrders = async (req: Request, res: Response) => {
+        const { ordersId } = req.body;
+        const { _id } = req.user;
+        try {
+            const getOrderId = await Order.find({ _id: { $in: ordersId }, "products.sellerId": _id });
+            if (!getOrderId) {
+                const error = new Error('Order not found');
+                return res.status(404).json({ error: error.message });
+            } else if (getOrderId.length === 0) {
+                const error = new Error('You cannot delete this order');
+                return res.status(404).json({ error: error.message });
+            }
+
+            await Order.deleteMany({ _id: { $in: ordersId } });
+            return res.status(200).json({ message: 'Orders deleted successfully' });
         } catch (e) {
             console.error(e);
             res.status(500).json({ message: 'Internal server error' });
