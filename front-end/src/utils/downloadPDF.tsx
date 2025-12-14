@@ -1,10 +1,10 @@
 import { pdf } from "@react-pdf/renderer";
-import type { OrdersPFD } from "../types";
+import type { OrdersPFD, User } from "../types";
 import { OrdersPDF } from "@/components/pdf/OrdersPDF";
 
-export const donwloadPDF = async (orders: OrdersPFD[]) => {
+export const donwloadPDF = async (orders: OrdersPFD[], user: User) => {
   const blob = await pdf(
-    <OrdersPDF orders={orders} />
+    <OrdersPDF orders={orders} user={user} />
   ).toBlob();
 
   const url = window.URL.createObjectURL(blob);

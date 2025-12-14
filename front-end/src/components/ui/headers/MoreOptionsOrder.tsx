@@ -1,4 +1,5 @@
 import { ordersManyDelete } from "@/api/OrderAPI";
+import { useUser } from "@/hooks/user";
 import { useOrderStore } from "@/stores/order";
 import { donwloadPDF } from "@/utils/downloadPDF";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -6,6 +7,7 @@ import { Download, Printer, Trash2, XCircle } from "lucide-react";
 import { toast } from "react-toastify";
 
 export default function MoreOptionsOrder() {
+  const {data: user} = useUser();
   const queryClient = useQueryClient();
   const selectedIds = useOrderStore((state) => state.selectedIds);
   const clear = useOrderStore((state) => state.clearOrder);
@@ -16,7 +18,8 @@ export default function MoreOptionsOrder() {
   const handleDownload = async () => {
     const orders = getSelectedOrdersPDF();
     if (!orders.length) return;
-    await donwloadPDF(orders);
+    if (!user) return;
+    await donwloadPDF(orders, user);
   };
 
   const { mutate: deleteManyOrders } = useMutation({
