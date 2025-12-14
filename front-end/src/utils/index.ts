@@ -22,3 +22,11 @@ export function getDate(): string {
   hours = hours ? hours : 12; // the hour '0' should be '12'
   return `${month} ${date.getDate()}, ${year} ${hours}:${minutes} ${ampm}`;
 }
+
+export function transformDate(date: Date): string {
+  const newDate = new Date(date);
+  const month = newDate.toLocaleDateString('en-US', { month: 'long' });
+  const day = newDate.getDate();
+  const year = newDate.getFullYear();
+  return `${month} ${day}, ${year}`;
+}

@@ -1,6 +1,6 @@
 import { useNotifications } from "@/hooks/useNotifications";
 import type { User } from "@/types/index";
-import { Bell } from "lucide-react";
+import { BellDotIcon } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -26,10 +26,10 @@ export default function Notification({ id, open, setOpen }: NotificationProps) {
     return (
       <div className="relative">
         <button
-          className="relative text-sm text-gray-600 hover:text-purple-600"
+          className="relative text-sm text-gray-700 hover:text-purple-600 mt-3"
           onClick={() => setOpen(!open)}
         >
-          <Bell className="w-6 h-6" />
+          <BellDotIcon size={20} />
           {notifications.length > 0 && (
             <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
               {notifications.length}

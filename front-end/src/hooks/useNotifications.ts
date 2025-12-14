@@ -21,11 +21,11 @@ export function useNotifications(userId: string) {
         socketClient.connect(userId);
 
         socketClient.onNotification((newNotification: Notification) => {
-            console.log("📩 Recibida notificación:", newNotification);
             queryClient.setQueryData<Notifications>(
                 ["notifications"],
                 (old = []) => [newNotification, ...old]
             );
+            queryClient.invalidateQueries({ queryKey: ["orders"] });
         });
 
         return () => socketClient.offNotification();

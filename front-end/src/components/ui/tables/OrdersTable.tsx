@@ -2,26 +2,29 @@ import Th from "../text/Th";
 import Td from "../text/Td";
 import type { Order, Orders } from "@/types/index";
 import { formatCurrency } from "@/utils/index";
-import { Ellipsis, Pencil, Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useOrderStore } from "@/stores/order";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import OrderProductModal from "../modals/OrderProductModal";
 
 interface OrdersTableProps {
   orders: Orders;
 }
 
 export default function OrdersTable({ orders }: OrdersTableProps) {
-  const {selecteAll, toggleOne, selectedIds, setToOrders} = useOrderStore();
-  const ids = orders.map(order => order._id);
+  const [isEnable, setIsEnable] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const { selecteAll, toggleOne, selectedIds, setToOrders } = useOrderStore();
+  const ids = orders.map((order) => order._id);
   const allChecked = selectedIds.length === ids.length;
 
-   useEffect(() => {
+  useEffect(() => {
     if (orders.length) {
       setToOrders(orders);
     }
   }, [orders, setToOrders]);
 
- return (
+  return (
     <div className="w-full mt-6">
       <table className="w-full border-collapse">
         <thead>
@@ -52,6 +55,10 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
               <tr
                 key={order._id}
                 className="h-12 border-b border-gray-200 text-sm hover:bg-gray-50 transition cursor-pointer"
+                onClick={() => {
+                  setIsEnable(true);
+                  setSelectedOrder(order);
+                }}
               >
                 <Td>
                   <input
@@ -97,15 +104,15 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
                   </span>
                 </Td>
                 <Td>
-                  <div className="flex items-center gap-3 text-gray-500">
-                    <button>
-                      <Pencil className="w-4 h-4 hover:text-blue-600" />
-                    </button>
-                    <button>
-                      <Trash2 className="w-4 h-4 hover:text-red-600" />
-                    </button>
-                    <button>
-                      <Ellipsis className="w-5 h-5 hover:text-gray-700" />
+                  <div className="flex items-center justify-center gap-3 text-gray-500">
+                    <button
+                      onClick={() => {
+                        setIsEnable(true);
+                        setSelectedOrder(order);
+                      }}
+                      className="cursor-pointer"
+                    >
+                      <Eye className="w-4 h-4 hover:text-blue-600" />
                     </button>
                   </div>
                 </Td>
@@ -114,6 +121,14 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
           })}
         </tbody>
       </table>
+
+      {selectedOrder && (
+        <OrderProductModal
+          isEnable={isEnable}
+          setIsEnable={setIsEnable}
+          order={selectedOrder}
+        />
+      )}
     </div>
   );
 }
