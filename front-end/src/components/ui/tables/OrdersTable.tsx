@@ -55,10 +55,6 @@ export default function OrdersTable({ orders }: OrdersTableProps) {
               <tr
                 key={order._id}
                 className="h-12 border-b border-gray-200 text-sm hover:bg-gray-50 transition cursor-pointer"
-                onClick={() => {
-                  setIsEnable(true);
-                  setSelectedOrder(order);
-                }}
               >
                 <Td>
                   <input

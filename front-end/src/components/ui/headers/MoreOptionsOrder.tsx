@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 export default function MoreOptionsOrder() {
   const queryClient = useQueryClient();
   const selectedIds = useOrderStore((state) => state.selectedIds);
+  const clear = useOrderStore((state) => state.clearOrder);
   const getSelectedOrdersPDF = useOrderStore(
     (state) => state.getSelectedOrdersPDF
   );
@@ -52,7 +53,7 @@ export default function MoreOptionsOrder() {
       <button className="flex items-center gap-2 py-1 px-2 border rounded-xl border-red-200 shadow-md font-bold cursor-pointer text-red-500" onClick={() => handleDeleteMany()}>
         <Trash2 className="w-4 h-4 font-black text-red-700" /> Delete
       </button>
-      <button className="flex items-center gap-2 py-1 px-2 font-bold cursor-pointer">
+      <button className="flex items-center gap-2 py-1 px-2 font-bold cursor-pointer" onClick={() => clear()}>
         <XCircle className="w-4 h-4 font-black text-gray-700" />
       </button>
     </footer>

@@ -9,6 +9,7 @@ interface OrderState {
     selecteAll: (ids: string[]) => void,
     toggleOne: (id: string) => void,
     getSelectedOrdersPDF: () => OrdersPFD[],
+    clearOrder: () => void
 }
 
 export const useOrderStore = create<OrderState>((set, get) => ({
@@ -38,5 +39,8 @@ export const useOrderStore = create<OrderState>((set, get) => ({
     getSelectedOrdersPDF: () => {
         const { order, selectedIds } = get();
         return order.filter(order => selectedIds.includes(order._id));
+    },
+    clearOrder: () => {
+        set({ selectedIds: [] });
     }
 }))
