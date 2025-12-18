@@ -1,12 +1,12 @@
 import Product from '../Models/Product';
 import User from '../Models/User';
-import Order, { methods } from '../Models/Order';
+import Order, { deliveryStatus, methods } from '../Models/Order';
 import { Request, Response } from 'express';
 import { isValidPaymentMethod } from '../utils';
 import { handlePayment } from '../services/payment.service';
 import { NotificationService } from '../services/notification.service';
 import { NotificationsType } from '../utils/notificationsType';
-import { log } from 'console';
+import ShippingGuide from '../Models/ShippingGuide';
 
 
 export class OrdersController {
@@ -77,7 +77,7 @@ export class OrdersController {
         try {
             const orders = await Order.find({ products: { $elemMatch: { sellerId: _id } } })
                 .select('user products createdAt is_payment total_amount')
-                .populate("user", "name email last_name image address -_id")
+                .populate("user", "name email last_name image address city cp phone_number -_id")
                 .populate("products.product", "images brand name price -_id")
                 .sort({ createdAt: -1 })
                 .lean();
@@ -122,4 +122,68 @@ export class OrdersController {
             res.status(500).json({ message: 'Internal server error' });
         }
     }
+
+    static getStats = async (req: Request, res: Response) => {
+        try {
+            const totalOrders = await Order.countDocuments();
+
+            const newOrders = await Order.countDocuments({
+                createdAt: {
+                    $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                },
+            });
+
+            const totalAmountAgg = await Order.aggregate([
+                { $group: { _id: null, total: { $sum: "$total_amount" } } },
+            ]);
+
+            const completedOrders = await Order.countDocuments({
+                delivered: deliveryStatus.DELIVERED,
+            });
+
+            const stats = [
+                { name: "Total orders", value: totalOrders },
+                { name: "New orders", value: newOrders },
+                { name: "Total amount", value: totalAmountAgg[0]?.total ?? 0 },
+                { name: "Completed orders", value: completedOrders },
+            ];
+
+            return res.status(200).json(stats);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    static generateShippingGuide = async (req: Request, res: Response) => {
+        const { _id } = req.user;
+        const { orderId } = req.params;
+        const { buyer } = req.body;
+        try {
+            const orders = await Order.find({ _id: orderId, "products.sellerId": buyer });
+            if (!orders) {
+                const error = new Error('Order not found');
+                return res.status(404).json({ error: error.message });
+            }
+
+            const existingGuide = await ShippingGuide.findOne({ guideNumber: orderId });
+            if (existingGuide) {
+                const error = new Error('Shipping guide already exists for this order');
+                return res.status(404).json({ error: error.message });
+            }
+
+            await ShippingGuide.create({
+                owner: _id,
+                buyer,
+                ...req.body
+            });
+
+            return res.status(200).json({ message: 'Shipping guide created successfully' });
+
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
 }

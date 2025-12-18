@@ -16,3 +16,12 @@ export const deleteManyOrders = [
     .isString()
     .withMessage("Order ID must be a string"),
 ]
+
+export const createShippingGuideRules = [
+  param("orderId").isString().withMessage("Order ID must be a string"),
+  body("guideNumber").isString().withMessage("Guide number must be a string"),
+  body("buyer").isString().withMessage("Buyer ID must be a string"),
+  body("comments").isString().withMessage("Comments must be a string"),
+  body("references").isString().withMessage("References must be a string"),
+  body("totalAmount").isNumeric().withMessage("Total amount must be a number"),
+];

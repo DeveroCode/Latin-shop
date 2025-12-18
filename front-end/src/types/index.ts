@@ -43,7 +43,25 @@ export const selectableMethods = Object.values(methods).filter(
     (method) => method !== methods.CASH
 );
 
+/** Delivery Status */
+export const deliveryStatus = {
+    PENDING_CONFIRMATION: "pending confirmation",
+    PROCESSING: "processing",
+    SHIPPED: "shipped",
+    OUT_FOR_DELIVERY: "out for delivery",
+    ARRIVED_AT_HUB: "arrived at local hub",
+    DELIVERED: "delivered",
+    CANCELED: "canceled",
+    RETURNED: "returned",
+    DELIVERY_ATTEMPT_FAILED: "delivery attempt failed",
+} as const;
 
+export type DeliveryStatus = typeof deliveryStatus[keyof typeof deliveryStatus];
+export const updateDeliveryStatus = Object.values(deliveryStatus).filter(
+    (method) => method !== deliveryStatus.PENDING_CONFIRMATION
+);
+
+/** Cards Schema  */
 export const CardsSchema = z.array(
     z.object({
         _id: z.string(),
@@ -153,7 +171,10 @@ export const orderSchema = z.object({
                 last_name: z.string(),
                 email: z.string(),
                 address: z.string(),
-                image: z.string()
+                image: z.string(),
+                cp: z.number(),
+                city: z.string(),
+                phone_number: z.string(),
             }),
             products: z.array(
                 z.object({
@@ -178,16 +199,53 @@ export const orderSchema = z.object({
 export type Order = z.infer<typeof orderSchema>["orders"][number];
 export type Orders = Order[];
 export type OrdersPFD =
-  Pick<Order, '_id' | 'total_amount'> & {
-    user: Pick<Order['user'], 'name' | 'last_name' | 'address'>;
-    products: {
-      product: Pick<
-        Order['products'][number]['product'],
-        'name' | 'brand' | 'price'
-      >;
-      quantity: Order['products'][number]['quantity'];
-    }[];
+    Pick<Order, '_id' | 'total_amount'> & {
+        user: Pick<Order['user'], 'name' | 'last_name' | 'address' | 'cp' | 'city' | 'phone_number'>;
+        products: {
+            product: Pick<
+                Order['products'][number]['product'],
+                'name' | 'brand' | 'price'
+            >;
+            quantity: Order['products'][number]['quantity'];
+        }[];
+    };
+
+/** Shipping Guide */
+export const shippingGuideSchema = z.array(
+    z.object({
+        _id: z.string(),
+        guideNumber: z.string(),
+        owner: z.string(),
+        buyer: z.string(),
+        comments: z.string(),
+        references: z.string(),
+        totalAmount: z.number(),
+        shippingDate: z.coerce.date()
+    })
+);
+
+export type ShippingGuide = z.infer<typeof shippingGuideSchema>;
+export type ShippingGuides = ShippingGuide[];
+export type ShippingGuideFormData = Pick<ShippingGuide[number], 'guideNumber' | 'buyer' | 'comments' | 'references' | 'totalAmount'>;
+
+export type ShippingGuidePDFData = {
+  order: OrdersPFD;
+  shippingDate: string;
+  comments: string;
+  references: string;
+  totalAmount: number;
 };
+
+/** Stats */
+export const statsSchema =
+  z.object({
+    name: z.string(),
+    value: z.number(),
+  })
+;
+
+export type Stat = z.infer<typeof statsSchema>;
+export type Stats = Stat[];
 
 
 /** Notifications */

@@ -7,7 +7,10 @@ export function toOrdersPDF(orders: Orders) : OrdersPFD[] {
         user: {
             name: order.user.name,
             last_name: order.user.last_name,
-            address: order.user.address
+            address: order.user.address,
+            cp: order.user.cp,
+            city: order.user.city,
+            phone_number: order.user.phone_number
         },
         products: order.products.map(p => ({
             product: {

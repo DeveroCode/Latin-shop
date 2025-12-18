@@ -11,6 +11,19 @@ export const methods = {
     LATIN_CARD: "latin card"
 } as const;
 
+export const deliveryStatus = {
+    PENDING_CONFIRMATION: "pending confirmation",
+    PROCESSING: "processing",
+    SHIPPED: "shipped",
+    OUT_FOR_DELIVERY: "out for delivery",
+    ARRIVED_AT_HUB: "arrived at local hub",
+    DELIVERED: "delivered",
+    CANCELED: "canceled",
+    RETURNED: "returned",
+    DELIVERY_ATTEMPT_FAILED: "delivery attempt failed",
+} as const;
+
+export type DeliveryStatus = typeof deliveryStatus[keyof typeof deliveryStatus];
 export type PaymentMethods = typeof methods[keyof typeof methods];
 
 /** TS */
@@ -24,7 +37,8 @@ export interface IOrder extends Document {
     }[],
     total_amount: number,
     is_payment: boolean,
-    payment_method: PaymentMethods
+    payment_method: PaymentMethods,
+    delivered: DeliveryStatus
 }
 
 /** Mongoose */
@@ -38,7 +52,8 @@ const OrderSchema: Schema = new Schema({
     }],
     total_amount: { type: Number, required: true },
     is_payment: { type: Boolean, required: true },
-    payment_method: { type: String, required: true, enum: Object.values(methods) }
+    payment_method: { type: String, required: true, enum: Object.values(methods) },
+    delivered: { type: String, required: true, enum: Object.values(deliveryStatus), default: deliveryStatus.PENDING_CONFIRMATION }
 }, { timestamps: true });
 
 const Order = mongoose.model<IOrder>('Order', OrderSchema);
