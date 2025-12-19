@@ -18,6 +18,7 @@ import DetailsProductView from "./views/Shop/DetailsProductView";
 import CartItemsView from "./views/Shop/CartItemsView";
 import CreditAccountView from "./views/dashboard/settings/CreditAccountView";
 import OrdersView from "./views/dashboard/OrdersView";
+import ChatView from "./views/dashboard/ChatView";
 
 export default function AppRouter() {
   return (
@@ -41,6 +42,7 @@ export default function AppRouter() {
             <Route path="products" element={<ProductsView />} />
             <Route path="orders" element={<OrdersView />} />
           </Route>
+           <Route path="customers" element={<ChatView />} />
 
           {/* Settings Section */}
           <Route path="settings" element={<SettingsLayout />}>
