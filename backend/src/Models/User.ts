@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 /** Roles */
-const roles = {
+export const roles = {
     BUYER: "buyer",
     SELLER: "seller"
 } as const;
