@@ -30,3 +30,10 @@ export function transformDate(date: Date): string {
   const year = newDate.getFullYear();
   return `${month} ${day}, ${year}`;
 }
+
+export function shortHoursAndMinutes(date: Date): string {
+  return new Date(date).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
