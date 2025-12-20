@@ -62,7 +62,11 @@ export default function ChatView() {
             ))}
           </div>
           {selectedChat ? (
-            <ChatBox chat={selectedChat} onClose={() => setSelectedChat(null)} />
+            <ChatBox
+              key={selectedChat._id}
+              chat={selectedChat}
+              onClose={() => setSelectedChat(null)}
+            />
           ) : (
             <div className="flex-1 h-[560px] flex flex-col items-center justify-center gap-4">
               <MessageCircle className="w-16 h-16 text-gray-400" />

@@ -239,43 +239,43 @@ export type ShippingGuidePDFData = {
 
 /** Chat and Message */
 export const chatSchema = z.object({
-  chats: z.array(
-    z.object({
-      _id: z.string(),
-      seller: z.object({
-        _id: z.string(),
-        name: z.string(),
-        last_name: z.string(),
-        email: z.string().email(),
-        role: z.string(),
-        image: z.string().url().optional(),
-        phone_number: z.string().optional(),
-      }),
-      buyer: z.object({
-        _id: z.string(),
-        name: z.string(),
-        last_name: z.string(),
-        email: z.string().email(),
-        role: z.string(),
-        image: z.string().url().optional(),
-        phone_number: z.string().optional(),
-      }),
-      order: z.object({
-        createdAt: z.coerce.date(),
-        products: z.array(
-          z.object({
-            name: z.string(),
-            price: z.number(),
-            quantity: z.number(),
-          })
-        ),
-      }),
-      lastMessage: z.string(),
-      lastMessageAt: z.coerce.date(),
-      unreadBy: z.enum(["buyer", "seller"]),
-      isActive: z.boolean(),
-    })
-  ),
+    chats: z.array(
+        z.object({
+            _id: z.string(),
+            seller: z.object({
+                _id: z.string(),
+                name: z.string(),
+                last_name: z.string(),
+                email: z.string().email(),
+                role: z.string(),
+                image: z.string().url().optional(),
+                phone_number: z.string().optional(),
+            }),
+            buyer: z.object({
+                _id: z.string(),
+                name: z.string(),
+                last_name: z.string(),
+                email: z.string().email(),
+                role: z.string(),
+                image: z.string().url().optional(),
+                phone_number: z.string().optional(),
+            }),
+            order: z.object({
+                createdAt: z.coerce.date(),
+                products: z.array(
+                    z.object({
+                        name: z.string(),
+                        price: z.number(),
+                        quantity: z.number(),
+                    })
+                ),
+            }),
+            lastMessage: z.string(),
+            lastMessageAt: z.coerce.date(),
+            unreadBy: z.enum(["buyer", "seller"]),
+            isActive: z.boolean(),
+        })
+    ),
 });
 
 export type Chat = z.infer<typeof chatSchema>["chats"][number];
@@ -285,11 +285,15 @@ export const messagesSchema = z.object({
     messages: z.array(
         z.object({
             _id: z.string(),
-            chat: z.string(),
-            sender: z.string(),
-            senderRole: z.enum(roles),
+            sender: z.object({
+                name: z.string(),
+                last_name: z.string(),
+                image: z.string(),
+            }),
+            senderRole: z.enum(["buyer", "seller"]),
             content: z.string(),
             isRead: z.boolean(),
+            createdAt: z.coerce.date()
         })
     )
 })
@@ -297,7 +301,7 @@ export const messagesSchema = z.object({
 export type Message = z.infer<typeof messagesSchema>["messages"][number];
 export type Messages = Message[];
 
-export type MessageFormData = Pick<Message, 'chat' | 'sender' | 'senderRole' | 'content' | 'isRead'>;
+export type MessageFormData = Pick<Message, 'senderRole' | 'content' | 'isRead'> & { sender: string, chat: string };
 
 /** Stats */
 export const statsSchema =

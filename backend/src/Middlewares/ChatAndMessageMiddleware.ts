@@ -6,3 +6,7 @@ export const sendMessageRules = [
     body("senderRole").isIn(["buyer", "seller"]).withMessage("Sender role must be either 'buyer' or 'seller'"),
     body("isRead").isBoolean().withMessage("isRead must be a boolean")
 ]
+
+export const getMessagesByChatRules = [
+    body("chatId").isString().withMessage("Chat ID must be a string")
+]

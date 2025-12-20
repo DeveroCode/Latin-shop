@@ -91,4 +91,18 @@ export class MessageController {
             res.status(500).json({ message: 'Internal server error' });
         }
     }
+
+    static getMessagesByChat = async (req: Request, res: Response) => {
+        const { chatId } = req.params;
+        const { _id } = req.user;
+      try {
+        const messages = await Message.find({ chat: chatId }, {sender: _id} ).sort({ createdAt: -1 })
+            .populate("sender", "name last_name image -_id")
+            .select("sender senderRole content isRead createdAt");
+        res.status(200).json({messages});
+      } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+    }
 }
