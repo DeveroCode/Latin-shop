@@ -1,11 +1,11 @@
-import {Server as HttpServer} from 'http';
-import {Server, Socket} from 'socket.io';
+import { Server as HttpServer } from 'http';
+import { Server, Socket } from 'socket.io';
 import { SocketManager } from '../config/socketManager';
 
 let io: Server | null = null;
 
 export const initSocket = (server: HttpServer) => {
-    if(io) return io;
+    if (io) return io;
 
     io = new Server(server, {
         cors: {
@@ -18,8 +18,8 @@ export const initSocket = (server: HttpServer) => {
     io.on("connection", (socket: Socket) => {
         console.log("Socket connected", socket.id);
 
-        socket.on("user-online", (payload: {userId: string}) => {
-            const {userId} = payload;
+        socket.on("user-online", (payload: { userId: string }) => {
+            const { userId } = payload;
             SocketManager.addUser(userId, socket.id);
             console.log(`User ${userId} is online`);
         })
@@ -31,7 +31,7 @@ export const initSocket = (server: HttpServer) => {
 
         socket.on("disconnect", () => {
             const removed = SocketManager.removeBySocketId(socket.id);
-            if(removed) console.log(`User ${removed} is offline`);
+            if (removed) console.log(`User ${removed} is offline`);
         })
 
         return io;
@@ -39,7 +39,7 @@ export const initSocket = (server: HttpServer) => {
 }
 
 
-export const getIO = () : Server => {
-    if(!io) throw new Error("Socket is not initialized");
+export const getIO = (): Server => {
+    if (!io) throw new Error("Socket is not initialized");
     return io;
 }

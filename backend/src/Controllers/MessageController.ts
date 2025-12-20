@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import Chat from "../Models/Chat";
 import Message from "../Models/Message";
 import User from "../Models/User";
+import { getIO } from "../socket/io";
+import { MessagesNotificationsType } from "../utils/notificationsType";
 
 export class MessageController {
 
@@ -84,8 +86,16 @@ export class MessageController {
                 isRead
             })
 
+
             await newMessage.save();
-            res.status(201).json({ message: 'Message created successfully'});
+
+            const populatedMessage = await Message.findById(newMessage._id)
+                .select("sender senderRole content isRead createdAt")
+                .populate("sender", "name last_name image -_id");
+
+            const io = getIO();
+            io.to(chat).emit(MessagesNotificationsType.NEW_MESSAGE, populatedMessage);
+            res.status(201).json({ message: 'Message created successfully' });
         } catch (e) {
             console.error(e);
             res.status(500).json({ message: 'Internal server error' });
@@ -95,14 +105,14 @@ export class MessageController {
     static getMessagesByChat = async (req: Request, res: Response) => {
         const { chatId } = req.params;
         const { _id } = req.user;
-      try {
-        const messages = await Message.find({ chat: chatId }, {sender: _id} ).sort({ createdAt: -1 })
-            .populate("sender", "name last_name image -_id")
-            .select("sender senderRole content isRead createdAt");
-        res.status(200).json({messages});
-      } catch (e) {
-        console.error(e);
-        res.status(500).json({ message: 'Internal server error' });
-      }
+        try {
+            const messages = await Message.find({ chat: chatId }, { sender: _id }).sort({ createdAt: -1 })
+                .populate("sender", "name last_name image -_id")
+                .select("sender senderRole content isRead createdAt");
+            res.status(200).json({ messages });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 }

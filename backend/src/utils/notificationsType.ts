@@ -7,3 +7,9 @@ export enum NotificationsType {
     ORDER_REFUND = "ORDER_REFUND",
     NEW_NOTIFICATION = "NEW_NOTIFICATION"
 }
+
+export enum MessagesNotificationsType {
+    NEW_MESSAGE = "NEW_MESSAGE",
+    MESSAGE_READ = "MESSAGE_READ",
+    MESSAGE_DELIVERED = "MESSAGE_DELIVERED"
+}
