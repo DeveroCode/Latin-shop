@@ -1,7 +1,6 @@
 import type { Product } from "@/types/index";
 import { formatCurrency } from "@/utils/index";
 import MenuOptions from "../MenuOptions";
-import Td from "../text/Td";
 
 type ProductTableProps = {
   products: Product;
@@ -68,9 +67,9 @@ export default function ProductTable({ products }: ProductTableProps) {
                 <td className="font-semibold text-gray-800 capitalize px-5 text-center">
                   {product.brand}
                 </td>
-                <Td>
+                <td>
                   <MenuOptions id={product._id} key={product._id} />
-                </Td>
+                </td>
               </tr>
             );
           })}
