@@ -52,7 +52,7 @@ export async function generateShippingGuide(formData: ShippingGuideFormData) {
 }
 export async function getStats() {
     try {
-        const data = await api.get('/orders/stats');
+        const { data } = await api.get('/orders/stats');
         const response = statsSchema.safeParse(data);
         console.log(response);
         if (response.success) {

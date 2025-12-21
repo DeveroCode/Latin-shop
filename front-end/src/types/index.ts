@@ -304,15 +304,16 @@ export type Messages = Message[];
 export type MessageFormData = Pick<Message, 'senderRole' | 'content' | 'isRead'> & { sender: string, chat: string };
 
 /** Stats */
-export const statsSchema =
+export const statsSchema = z.array(
     z.object({
-        name: z.string(),
-        value: z.number(),
-    })
-    ;
+    title: z.string(),
+    count: z.number(),
+    description: z.string()
+})
+)
 
-export type Stat = z.infer<typeof statsSchema>;
-export type Stats = Stat[];
+export type Stat = z.infer<typeof statsSchema>[number];
+export type Stats = z.infer<typeof statsSchema>;
 
 
 /** Notifications */

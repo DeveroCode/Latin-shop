@@ -143,27 +143,52 @@ export class OrdersController {
 
     static getStats = async (req: Request, res: Response) => {
         try {
-            const totalOrders = await Order.countDocuments();
-
-            const newOrders = await Order.countDocuments({
+            const now = Date.now();
+            const totalOrders = await Order.countDocuments({
                 createdAt: {
-                    $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                    $gte: new Date(now - 365 * 24 * 60 * 60 * 1000),
                 },
             });
-
-            const totalAmountAgg = await Order.aggregate([
-                { $group: { _id: null, total: { $sum: "$total_amount" } } },
-            ]);
-
+            const newOrders = await Order.countDocuments({
+                createdAt: {
+                    $gte: new Date(now - 7 * 24 * 60 * 60 * 1000),
+                },
+            });
             const completedOrders = await Order.countDocuments({
                 delivered: deliveryStatus.DELIVERED,
             });
+            const totalAmountAgg = await Order.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        total: { $sum: "$total_amount" },
+                    }
+                }
+            ]);
+
+            const totalAmount = totalAmountAgg[0]?.total ?? 0;
 
             const stats = [
-                { name: "Total orders", value: totalOrders },
-                { name: "New orders", value: newOrders },
-                { name: "Total amount", value: totalAmountAgg[0]?.total ?? 0 },
-                { name: "Completed orders", value: completedOrders },
+                {
+                    title: "Total Orders",
+                    count: totalOrders,
+                    description: "Total Orders last 365 days",
+                },
+                {
+                    title: "New Orders",
+                    count: newOrders,
+                    description: "New Orders last 7 days",
+                },
+                {
+                    title: "Completed Orders",
+                    count: completedOrders,
+                    description: "Completed Orders",
+                },
+                {
+                    title: "Total Amount",
+                    count: totalAmount,
+                    description: "Total revenue",
+                },
             ];
 
             return res.status(200).json(stats);
