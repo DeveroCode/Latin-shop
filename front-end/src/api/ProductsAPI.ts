@@ -91,7 +91,7 @@ export async function deleteProduct(id: Product[number]["_id"]) {
 
 export async function getProductById(id: Product[number]["_id"]) {
     try {
-        const { data } = await api.get<Product[number]>(`/products/${id}`);
+        const { data } = await api.get<Product[number]>(`/shop/product/${id}`);
         return data;
     } catch (error) {
         if (isAxiosError(error)) {
