@@ -117,7 +117,12 @@ export class ProductController {
 
       product.enabled = enabled;
       await product.save();
-      res.status(200).json({ message: "Product updated successfully" });
+      if(enabled) {
+        res.status(200).json({ message: 'Product enabled successfully' });
+      } else {
+        res.status(200).json({ message: 'Product disabled successfully' });
+      }
+
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: 'Internal server error' });

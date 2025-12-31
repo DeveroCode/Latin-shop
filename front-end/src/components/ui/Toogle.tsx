@@ -20,8 +20,8 @@ export default function Toggle({ id, isEnabled }: ToggleProps) {
 
   const { mutate } = useMutation({
     mutationFn: enabledProduct,
-    onSuccess: () => {
-      toast.success("Product updated successfully");
+    onSuccess: (data) => {
+      toast.success(data);
       queryClient.invalidateQueries({ queryKey: ["products"] });
     },
     onError: () => {
