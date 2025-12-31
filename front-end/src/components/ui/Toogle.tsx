@@ -26,7 +26,7 @@ export default function Toggle({ id, isEnabled }: ToggleProps) {
     },
     onError: () => {
       toast.error("Error updating product");
-      setChecked(prev => !prev); // rollback visual
+      setChecked(prev => !prev);
     },
   });
 
