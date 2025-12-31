@@ -11,6 +11,7 @@ export interface IProduct extends Document {
     category: PopulatedDoc<ICategory>;
     countInStock: number;
     user: PopulatedDoc<IUser>;
+    enabled: boolean;
     images: string[];
 }
 
@@ -23,6 +24,7 @@ const ProductSchema: Schema = new Schema({
     category: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Category' },
     countInStock: { type: Number, required: true },
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+    enabled: { type: Boolean, required: true, default: true },
     images: [{type: String, required: true}],
 }, {
     timestamps: true
