@@ -8,7 +8,7 @@ export default function DashboardLayout() {
     <div className="flex min-h-screen bg-gray-50">
       <Aside />
 
-      <div className="flex flex-col flex-1 bg-white">
+      <div className="flex flex-col flex-1 bg-white w-[80%]">
         <OptionsHeader />
         <main className="flex-1 px-6 overflow-y-auto">
           <Outlet />

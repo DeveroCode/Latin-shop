@@ -7,6 +7,9 @@ export type links = {
     icon: ElementType,
     url: string
 }
+export type linksProfile = Pick<links, "name" | "url" | "icon"> & {
+    description: string
+}
 
 export type ResponseMessage = {
     message: string;
