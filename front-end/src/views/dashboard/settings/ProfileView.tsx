@@ -1,8 +1,6 @@
 import { updateUser } from "@/api/AuthAPI";
 import UpdateProfileForm from "@/components/forms/UpdateProfileForm";
 import PrimaryButtons from "@/components/ui/PrimaryButtons";
-import Subtitle from "@/components/ui/text/Subtitle";
-import Title from "@/components/ui/text/Title";
 import { useUser } from "@/hooks/user";
 import type { UserUpdateForm } from "@/types/index";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -55,18 +53,12 @@ export default function ProfileView() {
     <form
       noValidate
       onSubmit={handleSubmit(handleUpdateUser)}
-      className="px-7 py-3 w-[80%]"
+      className="px-7 py-3"
     >
-      <div className="flex justify-between items-center">
-        <div>
-          <Title>Your Profile</Title>
-          <Subtitle>Update Your Profile Information</Subtitle>
-        </div>
-
-        <PrimaryButtons>Update</PrimaryButtons>
-      </div>
-
       <UpdateProfileForm register={register} errors={errors} />
+       <div className="flex justify-end">
+        <PrimaryButtons>Update</PrimaryButtons>
+       </div>
     </form>
   );
 }
