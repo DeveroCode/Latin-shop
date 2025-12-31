@@ -47,11 +47,15 @@ export default function ChatView() {
 
         {/* Start section Chat */}
         <section className="flex justify-between gap-5">
-          <div className="border border-gray-200 p-4 rounded-md w-96 mt-5">
-            <legend className="text-lg font-montserrat capitalize flex items-center gap-2">
+          <div className={`${chats.length === 0 && "hidden"} border border-gray-200 p-4 rounded-md w-96 mt-5`}>
+            {chats.length === 0 ? (
+              <p>No chats aviable</p>
+            ) : (
+              <legend className="text-lg font-montserrat capitalize flex items-center gap-2">
               All messages{" "}
               <p className="py-2 px-3 rounded-full bg-gray-200 text-xs">232</p>
             </legend>
+            )}
 
             {chats.map((chat) => (
               <AllChat
@@ -71,7 +75,7 @@ export default function ChatView() {
             <div className="flex-1 h-[560px] flex flex-col items-center justify-center gap-4">
               <MessageCircle className="w-16 h-16 text-gray-400" />
               <Title>No chat selected</Title>
-              <Subtitle>Select a chat to start messaging</Subtitle>
+              <Subtitle>Select a chat to start sending messages, or you have no messages.</Subtitle>
             </div>
           )}
         </section>
