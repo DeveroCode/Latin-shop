@@ -1,6 +1,6 @@
 import type { OrdersPFD } from "@/types/index";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import AlertLabel from "../ui/AlertLabel";
+import AlertLabel from "../ui/Alerts/AlertLabel";
 
 type form = {
     comments: string;

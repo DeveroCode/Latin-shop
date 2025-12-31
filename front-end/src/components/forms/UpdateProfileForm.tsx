@@ -1,7 +1,7 @@
 import { roles, type UserUpdateForm } from "@/types/index";
-import LabelText from "../ui/LabelText";
+import LabelText from "../ui/text/LabelText";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import AlertLabel from "../ui/AlertLabel";
+import AlertLabel from "../ui/Alerts/AlertLabel";
 
 type UpdateProfileFormProps = {
   register: UseFormRegister<UserUpdateForm>;

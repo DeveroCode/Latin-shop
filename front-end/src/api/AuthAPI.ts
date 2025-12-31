@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { ResponseMessage, userLoginForm, userRegisterForm, User, UserUpdateForm, AddCard, Card } from '../types'
+import type { ResponseMessage, userLoginForm, userRegisterForm, User, UserUpdateForm, AddCard, Card, DefaultCardResponse } from '../types'
 import { CardsSchema, userSchema } from "../types";
 import { isAxiosError } from "axios";
 
@@ -124,7 +124,7 @@ export async function selectedDefaultTarget(cardId: Card[number]["_id"]) {
 export async function getPaymentDefault(type_target: Card[number]["type_target"]) {
     try {
         const ecodeType = encodeURIComponent(type_target);
-        const { data } = await api.get<Card[number]>(`/auth/card/get-payment/${ecodeType}`);
+        const { data } = await api.get<DefaultCardResponse>(`/auth/card/get-payment/${ecodeType}`);
         return data
     } catch (error) {
         if (isAxiosError(error)) {

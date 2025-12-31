@@ -1,6 +1,6 @@
 import { TriangleAlert } from "lucide-react";
-import Subtitle from "@/components/ui/Subtitle";
-import Title from "@/components/ui/Title";
+import Subtitle from "@/components/ui/text/Subtitle";
+import Title from "@/components/ui/text/Title";
 import { useMutation } from "@tanstack/react-query";
 import { deleteAccount } from "@/api/AuthAPI";
 import { toast } from "react-toastify";

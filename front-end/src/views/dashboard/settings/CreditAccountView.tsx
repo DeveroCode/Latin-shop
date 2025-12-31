@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import CardTarget from "@/components/ui/Cards/CardTarget";
 import AddNewCreditCardModal from "@/components/ui/modals/AddNewCreditCardModal";
-import Subtitle from "@/components/ui/Subtitle";
-import Title from "@/components/ui/Title";
+import Subtitle from "@/components/ui/text/Subtitle";
+import Title from "@/components/ui/text/Title";
 
 export default function CreditAccountView() {
   const [isEnable, setIsEnable] = useState(false);

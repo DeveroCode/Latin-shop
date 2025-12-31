@@ -5,7 +5,7 @@ import { Package, BrickWallFire, House, MoveRight, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import DetailsPaymentForm from "../forms/DetailsPaymentForm";
 import { useForm } from "react-hook-form";
-import type { Card, PaymentMethods, ShoppingCart } from "@/types/index";
+import type { CardSet, PaymentMethods, ShoppingCart } from "@/types/index";
 import { useMutation } from "@tanstack/react-query";
 import { shopCart } from "@/api/ShopAPI";
 import { toast } from "react-toastify";
@@ -17,7 +17,7 @@ export default function OrderSummary() {
   const total_amount = useShoppingStore((state) => state.totalAmount());
   const totalPieces = useShoppingStore((state) => state.totalPieces());
 
-  const [defaultCard, setDefaultCard] = useState<Card[number] | null>(null);
+  const [defaultCard, setDefaultCard] = useState<CardSet["card"][number] | null>(null);
   const handlePaymentMethodChange = async (method: PaymentMethods) => {
     if (method === "credit card" || method === "debit card") {
       const response = await getPaymentDefault(method);
@@ -48,12 +48,16 @@ export default function OrderSummary() {
     total_amount: 0,
     is_payment: false,
     payment_method: "cash",
+    cardInfo: {
+      payment_method_id: ""
+    },
   };
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<ShoppingCart>({
     defaultValues: initialValues,
   });
@@ -68,6 +72,9 @@ export default function OrderSummary() {
       total_amount: total_amount,
       is_payment: false,
       payment_method: data.payment_method,
+      cardInfo: {
+        payment_method_id: data.cardInfo._id,
+      }
     };
     mutate(formData);
   };
@@ -140,6 +147,7 @@ export default function OrderSummary() {
                 register={register}
                 errors={errors}
                 onPaymentChange={handlePaymentMethodChange}
+                setValue={setValue}
               />
             </>
           )}

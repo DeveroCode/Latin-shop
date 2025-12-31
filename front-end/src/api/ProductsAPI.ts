@@ -105,6 +105,12 @@ type updateProduct = {
     id: Product[number]["_id"];
     formData: ProductFormData;
 }
+type enabledProduct = {
+    productId: Product[number]["_id"];
+    formData: {
+        enabled: boolean
+    };
+}
 
 export async function updateProduct({ id, formData }: updateProduct) {
     try {
@@ -113,6 +119,18 @@ export async function updateProduct({ id, formData }: updateProduct) {
     } catch (error) {
         if (isAxiosError(error)) {
             throw new Error(error.response?.data.errors);
+        }
+
+        return [];
+    }
+}
+export async function enabledProduct({ productId, formData }: enabledProduct) {
+    try {
+        const { data } = await api.put<ResponseMessage>(`/products/update/product/${productId}`, formData);
+        return data.message;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error);
         }
 
         return [];

@@ -104,6 +104,26 @@ export class ProductController {
     }
   }
 
+  static enabled = async (req: Request, res: Response) => {
+    const { productId } = req.params;
+    const { enabled } = req.body;
+
+    try {
+      const product = await Product.findById(productId);
+      if (!product) {
+        const error = new Error("Product not found");
+        return res.status(404).json({ error: error.message });
+      }
+
+      product.enabled = enabled;
+      await product.save();
+      res.status(200).json({ message: "Product updated successfully" });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
   static getProducts = async (req: Request, res: Response) => {
     const { id } = req.user
     try {

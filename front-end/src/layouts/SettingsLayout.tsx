@@ -1,8 +1,8 @@
-import Title from "@/components/ui/Title";
-import Subtitle from "@/components/ui/Subtitle";
+import Title from "@/components/ui/text/Title";
+import Subtitle from "@/components/ui/text/Subtitle";
 import { Outlet } from "react-router-dom";
 import { navigation } from "../data/navigation-settings";
-import Links from "@/components/ui/Links";
+import Links from "@/components/ui/text/Links";
 
 export default function SettingsLayout() {
   return (

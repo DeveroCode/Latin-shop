@@ -38,6 +38,13 @@ export const getProductByIdRules = [
     .isString()
     .withMessage("Product ID must be a string"),
 ];
+export const updateEnabled = [
+  param("productId")
+    .notEmpty()
+    .withMessage("Product ID is required")
+    .isString()
+    .withMessage("Product ID must be a string"),
+];
 
 export const uploadImages = [
   param("productId")

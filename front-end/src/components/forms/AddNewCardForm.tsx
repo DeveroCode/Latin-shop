@@ -1,4 +1,4 @@
-import AlertLabel from "../ui/AlertLabel";
+import AlertLabel from "../ui/Alerts/AlertLabel";
 import { selectableMethods, type AddCard } from "@/types/index";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 

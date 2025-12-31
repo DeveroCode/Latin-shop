@@ -1,6 +1,7 @@
 import type { Product } from "@/types/index";
 import { formatCurrency } from "@/utils/index";
 import MenuOptions from "../MenuOptions";
+import Toggle from "../Toogle";
 
 type ProductTableProps = {
   products: Product;
@@ -18,6 +19,7 @@ export default function ProductTable({ products }: ProductTableProps) {
             <th className="text-gray-800 capitalize text-sm px-5">image</th>
             <th className="text-gray-800 capitalize text-sm px-5">price</th>
             <th className="text-gray-800 capitalize text-sm px-5">status</th>
+            <th className="text-gray-800 capitalize text-sm px-5">enable</th>
             <th className="text-gray-800 capitalize text-sm px-5">inventory</th>
             <th className="text-gray-800 uppercase text-sm px-5 text-center">
               sku
@@ -60,6 +62,9 @@ export default function ProductTable({ products }: ProductTableProps) {
                   >
                     Pending
                   </span>
+                </td>
+                <td className="font-semibold text-gray-800 capitalize px-5 text-center">
+                  <Toggle isEnabled={product.enabled} id={product._id} />
                 </td>
                 <td className="font-semibold text-gray-800 capitalize px-5 text-center">
                   {product.countInStock}

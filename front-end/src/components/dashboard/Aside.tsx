@@ -1,6 +1,6 @@
 import { useUser } from "@/hooks/user";
 import { navigation } from "../../data/navigation";
-import Links from "../ui/Links";
+import Links from "../ui/text/Links";
 import Logo from "../ui/Logo";
 import Header from "./Header";
 import { LogOut } from "lucide-react";

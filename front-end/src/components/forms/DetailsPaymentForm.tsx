@@ -1,23 +1,26 @@
 import { payments } from "@/utils/payments";
 import type { PaymentMethods, ShoppingCart } from "@/types/index";
 import { useState } from "react";
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 type DetailsPaymentFormProps = {
   register: UseFormRegister<ShoppingCart>;
   errors: FieldErrors<ShoppingCart>;
   onPaymentChange: (method: PaymentMethods) => void;
+  setValue: UseFormSetValue<ShoppingCart>;
 };
 
 export default function DetailsPaymentForm({
   register,
   errors,
   onPaymentChange,
+  setValue,
 }: DetailsPaymentFormProps) {
   const [selectedPayment, isSelectedPayment] = useState<PaymentMethods>("cash");
 
   const handleChange = (value: PaymentMethods) => {
     isSelectedPayment(value);
+    setValue("payment_method", value, { shouldValidate: true });
     onPaymentChange(value);
   };
   return (

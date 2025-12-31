@@ -4,8 +4,8 @@ import CreateProductModal from "@/components/ui/modals/CreateProductModal";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "@/api/ProductsAPI";
-import Title from "@/components/ui/Title";
-import Subtitle from "@/components/ui/Subtitle";
+import Title from "@/components/ui/text/Title";
+import Subtitle from "@/components/ui/text/Subtitle";
 import OrderOptionsHeader from "@/components/ui/headers/OrderOptionsHeader";
 
 export default function ProductsView() {

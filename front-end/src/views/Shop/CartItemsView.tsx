@@ -1,13 +1,12 @@
 import OrderSummary from "@/components/shop/OrderSummary";
 import Card_item_details from "@/components/ui/Cards/Card_item_details";
 import PrimaryButtons from "@/components/ui/PrimaryButtons";
-import Subtitle from "@/components/ui/Subtitle";
+import Subtitle from "@/components/ui/text/Subtitle";
 import { useShoppingStore } from "@/stores/shopping";
 import { Link } from "react-router-dom";
 
 export default function CartItemsView() {
   const { cart } = useShoppingStore();
-    console.log(cart);
   return (
     <div className="px-4 md:px-14 lg:px-20 xl:px-32 py-10 flex flex-col md:flex-row gap-10">
       <div className="bg-white rounde-md shadow-xl p-8 w-full border border-gray-100 h-fit">

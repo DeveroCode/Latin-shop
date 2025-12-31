@@ -1,8 +1,8 @@
 import { updateUser } from "@/api/AuthAPI";
 import UpdateProfileForm from "@/components/forms/UpdateProfileForm";
 import PrimaryButtons from "@/components/ui/PrimaryButtons";
-import Subtitle from "@/components/ui/Subtitle";
-import Title from "@/components/ui/Title";
+import Subtitle from "@/components/ui/text/Subtitle";
+import Title from "@/components/ui/text/Title";
 import { useUser } from "@/hooks/user";
 import type { UserUpdateForm } from "@/types/index";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

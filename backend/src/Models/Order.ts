@@ -10,7 +10,7 @@ export const methods = {
     CREDIT_CARD: "credit card",
     LATIN_CARD: "latin card"
 } as const;
-
+export type PaymentMethods = typeof methods[keyof typeof methods];
 export const deliveryStatus = {
     PENDING_CONFIRMATION: "pending confirmation",
     PROCESSING: "processing",
@@ -24,7 +24,7 @@ export const deliveryStatus = {
 } as const;
 
 export type DeliveryStatus = typeof deliveryStatus[keyof typeof deliveryStatus];
-export type PaymentMethods = typeof methods[keyof typeof methods];
+
 
 /** TS */
 export interface IOrder extends Document {

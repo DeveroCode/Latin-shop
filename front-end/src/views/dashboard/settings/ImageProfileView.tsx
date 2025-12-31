@@ -1,6 +1,6 @@
 import Dropzone from "@/components/dashboard/Settings/Dropzone";
-import Subtitle from "@/components/ui/Subtitle";
-import Title from "@/components/ui/Title";
+import Subtitle from "@/components/ui/text/Subtitle";
+import Title from "@/components/ui/text/Title";
 
 export default function ImageProfileView() {
   return (

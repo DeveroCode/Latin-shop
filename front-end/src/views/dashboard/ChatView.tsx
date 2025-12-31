@@ -1,5 +1,5 @@
-import Title from "@/components/ui/Title";
-import Subtitle from "@/components/ui/Subtitle";
+import Title from "@/components/ui/text/Title";
+import Subtitle from "@/components/ui/text/Subtitle";
 import { MessageCircle } from "lucide-react";
 import { useUser } from "@/hooks/user";
 import AllChat from "@/components/ui/chat/AllChat";

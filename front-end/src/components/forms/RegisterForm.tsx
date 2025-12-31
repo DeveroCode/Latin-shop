@@ -1,6 +1,6 @@
 import type { userRegisterForm } from "@/types/index";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
-import ErrorAlert from "../ui/ErrorAlert";
+import ErrorAlert from "../ui/Alerts/ErrorAlert";
 
 type RegisterFormProps = {
   errors: FieldErrors<userRegisterForm>;
