@@ -74,7 +74,19 @@ export const CardsSchema = z.array(
 );
 
 export type Card = z.infer<typeof CardsSchema>;
-
+export type DefaultCardResponse = {
+  card: Card[number];
+};
+export type CardSet = {
+    card: {
+        _id: Card[number]["_id"],
+        lastNumbers: Card[number]["lastNumbers"],
+        cvv: Card[number]["cvv"],
+        expirationDate: Card[number]["expirationDate"],
+        type_target: Card[number]["type_target"],
+        default: Card[number]["default"]
+    }[]
+}
 export type AddCard = Pick<Card[number], 'lastNumbers' | 'cvv' | 'expirationDate' | 'type_target'> & { user: string }
 
 /** Users */
@@ -125,6 +137,7 @@ export const productSchema = z.array(
             _id: z.string(),
             name: z.string(),
         }),
+        enabled: z.boolean(),
         images: z.array(z.string()),
         countInStock: z.number(),
     })
@@ -159,6 +172,9 @@ export type ShoppingCart = {
     total_amount: number,
     is_payment: boolean,
     payment_method: PaymentMethods
+    cardInfo: {
+       payment_method_id: string
+    }
 }
 
 /** Orders Type */
