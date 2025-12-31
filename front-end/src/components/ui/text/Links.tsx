@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import type { links } from "../../types";
+import { NavLink } from "react-router-dom";
+import type { links } from "@/types/index";
 
 type LinkProps = {
   link: links;
@@ -7,9 +7,18 @@ type LinkProps = {
 
 export default function Links({ link }: LinkProps) {
   return (
-    <Link to={link.url} className="text-gray-700 font-semibold text-left p-3 rounded hover:bg-gray-100 flex items-center">
+    <NavLink
+      to={link.url}
+      end={false}
+      className={({ isActive }) =>
+        `
+        text-gray-700 p-2 font-semibold text-left flex items-center
+        ${isActive ? "border-l-2 border-gray-900" : ""}
+        `
+      }
+    >
       {link.icon && <link.icon className="w-4 h-4 mr-2" />}
       {link.name}
-    </Link>
+    </NavLink>
   );
 }
