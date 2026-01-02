@@ -46,7 +46,7 @@ export default function AppRouter() {
 
           {/* Settings Section */}
           <Route path="settings" element={<SettingsLayout />}>
-            <Route index path="general" element={<GeneralView />} />
+            <Route index element={<GeneralView />} />
             <Route path="profile" element={<ProfileView />} />
             <Route path="image-profile" element={<ImageProfileView />} />
             <Route path="credit-account" element={<CreditAccountView />} />

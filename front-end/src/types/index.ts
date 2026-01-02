@@ -5,7 +5,8 @@ import { z } from "zod";
 export type links = {
     name: string,
     icon: ElementType,
-    url: string
+    url: string,
+    exact?: boolean;
 }
 export type linksProfile = Pick<links, "name" | "url" | "icon"> & {
     description: string

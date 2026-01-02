@@ -20,7 +20,7 @@ export default function SettingsLayout() {
         </div>
 
         <div className="flex items-center gap-2">
-         {pathname !== "/dashboard/settings/general" && <NavLink to="/dashboard/settings/general"><ChevronLeft className="w-5 h-5" /></NavLink>}
+         {pathname !== "/dashboard/settings" && <NavLink to="/dashboard/settings"><ChevronLeft className="w-5 h-5" /></NavLink>}
            <Title>User settings</Title>
         </div>
         <Subtitle>Manage your account settings</Subtitle>
