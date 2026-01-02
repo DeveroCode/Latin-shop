@@ -143,7 +143,6 @@ export class OrdersController {
         }
     };
 
-
     static getOrders = async (req: Request, res: Response) => {
         const { _id } = req.user;
         try {
