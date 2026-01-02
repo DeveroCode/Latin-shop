@@ -16,7 +16,6 @@ export default function Card_status_orders() {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading stats</div>;
   if (!stats) return null;
-  console.log(stats);
 
   return (
     <div className="w-full py-6 border-b border-gray-200 my-3">
