@@ -1,5 +1,4 @@
 import { getOrders } from "@/api/OrderAPI";
-import Card_status_orders from "@/components/ui/Cards/Card_status_orders";
 import MoreOptionsOrder from "@/components/ui/headers/MoreOptionsOrder";
 import OrderOptionsHeader from "@/components/ui/headers/OrderOptionsHeader";
 import Subtitle from "@/components/ui/text/Subtitle";
@@ -8,6 +7,7 @@ import Title from "@/components/ui/text/Title";
 import { useOrderStore } from "@/stores/order";
 import { useQuery } from "@tanstack/react-query";
 import { House } from "lucide-react";
+import KPIsOrders from "@/components/ui/Cards/KPIsOrders";
 
 export default function OrdersView() {
   const isSelectedId = useOrderStore(state => state.selectedIds.length > 0);
@@ -37,7 +37,7 @@ export default function OrdersView() {
           <Subtitle>Here you can find all of your Orders</Subtitle>
         </section>
 
-        <Card_status_orders />
+        <KPIsOrders />
 
         {data.length > 0 ? <OrdersTable orders={data} /> : (
           <p className="text-center text-gray-500 py-24 font-montserrat text-2xl">You have no orders</p>

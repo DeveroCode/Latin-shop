@@ -6,7 +6,7 @@ import { getStats } from "@/api/OrderAPI";
 import type { Stat, Stats } from "@/types/index";
 import { formatCurrency } from "@/utils/index";
 
-export default function Card_status_orders() {
+export default function KPIsOrders() {
   const { data: stats, isLoading, isError } = useQuery<Stats>({
     queryKey: ["stats"],
     queryFn: getStats,
