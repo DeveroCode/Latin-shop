@@ -7,7 +7,6 @@ import cloudinary from "../config/cloudinary";
 import { v4 as uuid } from 'uuid';
 import Product from "../Models/Product";
 import Card from "../Models/Card";
-import NotificationModel from "../Models/Notification";
 
 export class AuthController {
 
