@@ -11,41 +11,38 @@ export default function CardTarget({ target }: CardTargetProps) {
   const { mutate } = useMutation({
     mutationFn: selectedDefaultTarget,
     onSuccess: (data) => {
-      toast.success(data);
+      toast.success(data)
       queryClient.invalidateQueries({ queryKey: ["cards"] });
     },
     onError: (error) => {
       toast.error(error.message);
-    },
+    }
   });
-
-  const handleSelectedTarget = (cardId: Card[number]["_id"]) => mutate(cardId);
 
   return (
     <div
-      className={`${
-        target.default ? "border-blue-900" : " border-gray-300"
-      } border bg-white rounded-md p-2 cursor-pointer`}
-      onClick={() => handleSelectedTarget(target._id)}
+      onClick={() => mutate(target._id)}
+      className={`w-44 p-3 rounded-lg border cursor-pointer transition
+        ${target.default ? "border-blue-900 bg-white" : "border-gray-200 bg-gray-50"}
+      `}
     >
-      <div className="flex justify-between items-center py-1">
-        <p className="capitalize text-xs font-montserrat">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-xs text-gray-500 uppercase">
           {target.type_target}
-        </p>
-
+        </span>
         {target.default && (
-          <div className="w-2 h-2 rounded-full bg-blue-900"></div>
+          <span className="w-2 h-2 rounded-full bg-blue-900"></span>
         )}
       </div>
 
-      <span className="text-gray-800 font-semibold">
+      <p className="font-semibold text-sm text-gray-800 tracking-wider">
         **** **** **** {target.lastNumbers}
-      </span>
+      </p>
 
-      <div className="flex justify-between">
-        <span className="text-xs">{target.cvv}</span>
-        <span className="text-xs">{target.expirationDate}</span>
-      </div>
+      <p className="text-xs text-gray-400 mt-1">
+        EXP {target.expirationDate}
+      </p>
     </div>
   );
 }
+

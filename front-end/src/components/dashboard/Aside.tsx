@@ -4,11 +4,11 @@ import Links from "../ui/text/Links";
 import Logo from "../ui/Logo";
 import Header from "./Header";
 import { LogOut } from "lucide-react";
-
 export default function Aside() {
   const { data: user } = useUser();
+
   return (
-    <aside className="w-72 bg-gray-100 border-r border-gray-300 flex flex-col p-4 justify-between">
+    <aside className="w-72 bg-gray-100 border-r border-gray-300 flex flex-col p-4 justify-between overflow-y-hidden">
       <div>
         <Logo />
 
