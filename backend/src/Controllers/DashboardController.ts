@@ -125,4 +125,48 @@ export class DashboardController {
         }
     };
 
+    static actualSales = async (req: Request, res: Response) => {
+      try {
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        const data = await Order.aggregate([
+            {
+                $match: {
+                    is_payment: true,
+                    createdAt: { $gte: startOfMonth },
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    target: {$sum: "$total_amount"},
+                    revenue: {
+                        $sum: {
+                            $cond: [
+                               {$eq: ["$is_payment", true]},
+                                "$total_amount",
+                                0
+                            ]
+                        }
+                    }
+                }
+            }
+        ]);
+
+        const resutl = data[0] || { target: 0, revenue: 0 };
+
+        const chartData = {
+            labels: ['Target', 'Revenue'],
+            series: [resutl.target, resutl.revenue],
+        };
+        
+        return res.status(200).json(chartData);
+      } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+    }
+
 }

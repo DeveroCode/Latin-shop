@@ -8,5 +8,6 @@ router.use(authenticate);
 
 router.get('', DashboardController.KPIDashboard)
 router.get('/main/:days', DashboardController.chartsMain);
+router.get('/actual/sales', DashboardController.actualSales);
 
 export default router;

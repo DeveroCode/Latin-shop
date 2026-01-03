@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
 import { isAxiosError } from "axios";
-import { chartsMainSchema, statsSchema, type ChartsMain } from "../types";
+import { actualSalesSchema, chartsMainSchema, statsSchema, type ActualSales, type ChartsMain } from "../types";
 
 export async function KPIDashboard() {
     try {
@@ -38,5 +38,24 @@ export async function getMainData(days: string): Promise<ChartsMain> {
             revenue: [],
             orders: []
         }
+    });
+}
+
+export async function getActualSales(): Promise<ActualSales>{
+    try {
+        const {data} = await api<ActualSales>('/dashboard/actual/sales');
+        const response = actualSalesSchema.safeParse(data);
+        if(response.success){
+            return response.data;
+        }
+    } catch (error) {
+         if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error);
+        }
+    }
+
+    return Promise.resolve({
+        labels: [],
+        series: []
     });
 }

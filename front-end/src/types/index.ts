@@ -357,3 +357,9 @@ export const chartsMainSchema = z.object({
     })
 })
 export type ChartsMain = z.infer<typeof chartsMainSchema>;
+
+export const actualSalesSchema = z.object({
+    labels: z.array(z.string()),
+    series: z.array(z.number())
+})
+export type ActualSales = z.infer<typeof actualSalesSchema>;
