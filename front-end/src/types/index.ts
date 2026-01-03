@@ -331,11 +331,8 @@ export const statsSchema = z.array(
     description: z.string()
 })
 )
-
 export type Stat = z.infer<typeof statsSchema>[number];
 export type Stats = z.infer<typeof statsSchema>;
-
-
 /** Notifications */
 export const notificationsSchema = z.object({
     notifications: z.array(
@@ -349,7 +346,14 @@ export const notificationsSchema = z.object({
         })
     )
 });
-
-
 export type Notification = z.infer<typeof notificationsSchema>["notifications"][number];
 export type Notifications = Notification[];
+/** Charts Types */
+export const chartsMainSchema = z.object({
+    labels: z.array(z.string()),
+    series: z.object({
+        revenue: z.array(z.number()),
+        orders: z.array(z.number())
+    })
+})
+export type ChartsMain = z.infer<typeof chartsMainSchema>;

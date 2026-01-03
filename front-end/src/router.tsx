@@ -36,6 +36,7 @@ export default function AppRouter() {
           <Route path="login" index element={<LoginView />} />
           <Route path="register" index element={<RegisterView />} />
         </Route>
+        {/* Dashboard */}
         <Route path="/dashboard" element={<DasboardLayout />}>
           <Route index element={<Index />} />
           <Route element={<RequireRoles roles={["seller"]} />}>

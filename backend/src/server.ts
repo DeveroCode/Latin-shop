@@ -10,6 +10,7 @@ import AuthRoute from './Routes/AuthRoute';
 import ShopRoute from './Routes/ShopRoute';
 import OrderRoute from './Routes/OrderRoute';
 import ChatRoute from './Routes/ChatRoute';
+import DahsboardRoute from './Routes/DashboardRoute';
 import http from 'http';
 
 
@@ -23,6 +24,7 @@ app.use(express.json());
 
 // rourtes
 app.use('/api/auth', AuthRoute)
+app.use('/api/dashboard', DahsboardRoute)
 app.use('/api/products', productsRoute)
 app.use('/api/categories', categoriesRoute)
 app.use('/api/shop', ShopRoute);
