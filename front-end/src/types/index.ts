@@ -70,9 +70,9 @@ export const CardsSchema = z.array(
     z.object({
         _id: z.string(),
         lastNumbers: z.string(),
-        cvv: z.string(),
         expirationDate: z.string(),
         type_target: z.string(),
+        payment_method_id: z.string().optional(),
         default: z.boolean()
     })
 );
@@ -85,13 +85,14 @@ export type CardSet = {
     card: {
         _id: Card[number]["_id"],
         lastNumbers: Card[number]["lastNumbers"],
-        cvv: Card[number]["cvv"],
+        payment_method: Card[number]["payment_method_id"],
         expirationDate: Card[number]["expirationDate"],
         type_target: Card[number]["type_target"],
+        payment_method_id?: string
         default: Card[number]["default"]
     }[]
 }
-export type AddCard = Pick<Card[number], 'lastNumbers' | 'cvv' | 'expirationDate' | 'type_target'> & { user: string }
+export type AddCard = Pick<Card[number], 'type_target' | 'payment_method_id'> & { user: string }
 
 /** Users */
 export const userSchema = z.object({
@@ -103,6 +104,7 @@ export const userSchema = z.object({
     image: z.string().optional(),
     phone_number: z.string().optional(),
     address: z.string().optional(),
+    stripeCustomerId: z.string().optional(),
     cp: z.number().optional(),
     city: z.string().optional(),
     country: z.string().optional(),
@@ -178,6 +180,7 @@ export type ShoppingCart = {
     payment_method: PaymentMethods
     cardInfo: {
        payment_method_id: string
+       customer_id: string
     }
 }
 

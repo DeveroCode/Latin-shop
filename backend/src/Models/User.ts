@@ -21,6 +21,7 @@ export interface IUser extends Document {
     cp: number;
     city: string;
     country: string;
+    stripeCustomerId?: string;
 }
 
 /** Mongoose */
@@ -36,6 +37,7 @@ const UserSchema: Schema = new Schema({
     cp: { type: Number, default: 0 },
     city: { type: String, trim: true, default: "" },
     country: { type: String, trim: true, default: "" },
+    stripeCustomerId: { type: String, default: "" },
 }, {
     timestamps: true
 });

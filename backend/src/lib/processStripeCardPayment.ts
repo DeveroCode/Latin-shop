@@ -2,6 +2,7 @@ import { stripe } from "../config/stripe";
 
 export interface CardInfo {
   payment_method_id: string;
+   customer_id: string;
 }
 
 export async function processStripeCardPayment(amount: number, cardInfo: CardInfo) {
@@ -10,6 +11,7 @@ export async function processStripeCardPayment(amount: number, cardInfo: CardInf
       amount: amount * 100,
       currency: "mxn",
       payment_method: cardInfo.payment_method_id,
+      customer: cardInfo.customer_id,
       confirm: true,
       automatic_payment_methods: {
         enabled: true,

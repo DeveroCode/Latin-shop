@@ -7,11 +7,16 @@ import DetailsPaymentForm from "../forms/DetailsPaymentForm";
 import { useForm } from "react-hook-form";
 import type { CardSet, PaymentMethods, ShoppingCart } from "@/types/index";
 import { useMutation } from "@tanstack/react-query";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { shopCart } from "@/api/ShopAPI";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { getPaymentDefault } from "@/api/AuthAPI";
+import { useUser } from "@/hooks/user";
 export default function OrderSummary() {
+  const {data: user} = useUser();
+  const stripe = useStripe();
+  const elements = useElements();
   const navigate = useNavigate();
   const { cart } = useShoppingStore();
   const total_amount = useShoppingStore((state) => state.totalAmount());
@@ -35,7 +40,7 @@ export default function OrderSummary() {
     mutationFn: shopCart,
     onSuccess: (data) => {
       toast.success(data);
-      navigate("/dashboard/settings/general");
+      navigate("/dashboard/settings");
       reset();
     },
     onError: (error) => {
@@ -49,7 +54,8 @@ export default function OrderSummary() {
     is_payment: false,
     payment_method: "cash",
     cardInfo: {
-      payment_method_id: ""
+      payment_method_id: "",
+      customer_id: "",
     },
   };
   const {
@@ -62,20 +68,54 @@ export default function OrderSummary() {
     defaultValues: initialValues,
   });
 
-  const handleSendOrder = (data: ShoppingCart) => {
+  const handleSendOrder = async (data: ShoppingCart) => {
+    let paymentMethodId = "";
+
+    if (defaultCard) {
+      paymentMethodId = defaultCard.payment_method_id!;
+    }
+
+    else if (data.payment_method !== "cash") {
+      if (!stripe || !elements) {
+        toast.error("Stripe no está listo");
+        return;
+      }
+
+      const cardElement = elements.getElement(CardElement);
+
+      if (!cardElement) {
+        toast.error("No card element");
+        return;
+      }
+
+      const { paymentMethod, error } = await stripe.createPaymentMethod({
+        type: "card",
+        card: cardElement,
+      });
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      paymentMethodId = paymentMethod.id;
+    }
+
     const formData: ShoppingCart = {
       products: cart.map((item) => ({
         product: item._id,
         quantity: item.quantity,
         price: item.price,
       })),
-      total_amount: total_amount,
-      is_payment: false,
+      total_amount,
+      is_payment: !!paymentMethodId,
       payment_method: data.payment_method,
       cardInfo: {
-        payment_method_id: data.cardInfo._id,
-      }
+        payment_method_id: paymentMethodId,
+        customer_id: user!.stripeCustomerId || "",
+      },
     };
+
     mutate(formData);
   };
 
@@ -130,7 +170,10 @@ export default function OrderSummary() {
                 <p className="text-gray-900 capitalize font-bold">
                   {defaultCard.type_target}
                 </p>
-                <button onClick={() => setDefaultCard(null)} className="cursor-pointer">
+                <button
+                  onClick={() => setDefaultCard(null)}
+                  className="cursor-pointer"
+                >
                   <X className="w-4 h-4" />
                 </button>
               </div>

@@ -7,6 +7,7 @@ import cloudinary from "../config/cloudinary";
 import { v4 as uuid } from 'uuid';
 import Product from "../Models/Product";
 import Card from "../Models/Card";
+import { stripe } from "../config/stripe";
 
 export class AuthController {
 
@@ -119,23 +120,56 @@ export class AuthController {
     }
   }
 
-  static addNewCard = async (req: Request, res: Response) => {
-    const { id } = req.user
-    try {
-      const user = await User.findById(id);
-      if (!user) {
-        const error = new Error('User not found');
-        return res.status(404).json({ error: error.message });
-      }
+ static addNewCard = async (req: Request, res: Response) => {
+  const { id } = req.user;
+  const { payment_method_id, type_target } = req.body;
 
-      const card = await new Card({ ...req.body, user: id });
-      await card.save();
-      res.status(200).json({ message: 'Card added successfully' });
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ message: 'Internal server error' });
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
+    if (!user.stripeCustomerId) {
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.name,
+      });
+
+      user.stripeCustomerId = customer.id;
+      await user.save();
+    }
+
+    await stripe.paymentMethods.attach(payment_method_id, {
+      customer: user.stripeCustomerId,
+    });
+    const paymentMethod = await stripe.paymentMethods.retrieve(
+      payment_method_id
+    );
+
+    await Card.updateMany({ user: id }, { default: false });
+
+    const card = new Card({
+      user: id,
+      payment_method_id,
+      lastNumbers: paymentMethod.card?.last4,
+      expirationDate: `${paymentMethod.card?.exp_month}/${paymentMethod.card?.exp_year}`,
+      type_target,
+      default: true,
+    });
+
+    await card.save();
+
+    res.status(201).json({ message: "Card stored successfully" });
+  } catch (error: any) {
+    console.error(error);
+
+    if (error.code === "resource_missing") {
+      return res.status(400).json({ error: "Payment method not found" });
+    }
+
+    res.status(500).json({ error: "Internal server error" });
   }
+};
 
   static getCardsPayments = async (req: Request, res: Response) => {
     const { id } = req.user

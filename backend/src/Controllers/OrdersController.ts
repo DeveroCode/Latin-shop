@@ -17,9 +17,8 @@ export class OrdersController {
         session.startTransaction();
 
         try {
-            const { id, role } = req.user;
+            const { id, role, stripeCustomerId } = req.user;
             const { products, total_amount, payment_method, cardInfo } = req.body;
-            console.log(cardInfo);
 
             if (!isValidPaymentMethod(payment_method)) {
                 await session.abortTransaction();
