@@ -6,8 +6,8 @@ export default function Rating() {
           key={i}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
-          fill="#000"
-          stroke="#000"
+          fill="#FFD700"
+          stroke="#FFD700"
           strokeWidth="1.5"
           className="w-3 h-3 transition-transform duration-300 group-hover:scale-110"
         >
