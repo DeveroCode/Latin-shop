@@ -1,6 +1,6 @@
 export default function Rating() {
   return (
-    <div className="flex gap-1 justify-center items-center">
+    <div className="flex gap-1 items-center">
       {Array.from({ length: 6 }).map((_, i) => (
         <svg
           key={i}
