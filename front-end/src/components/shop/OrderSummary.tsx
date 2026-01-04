@@ -27,7 +27,7 @@ export default function OrderSummary() {
     if (method === "credit card" || method === "debit card") {
       const response = await getPaymentDefault(method);
       if (response) {
-        setDefaultCard(response.card);
+        setDefaultCard(response.card as CardSet["card"][number]);
       } else {
         setDefaultCard(null);
       }
