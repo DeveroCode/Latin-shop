@@ -115,14 +115,33 @@ export class OrdersController {
                     createdAt: new Date()
                 });
 
-                await Chat.create({
-                    seller: sellerId,
+                const chat = await Chat.findOne({
                     buyer: id,
-                    order: order[0]._id,
-                    lastMessage: 'Chat started',
-                    unreadBy: role,
-                    isActive: true,
+                    seller: sellerId,
                 });
+
+                if (!chat) {
+                    await Chat.create({
+                        buyer: id,
+                        seller: sellerId,
+                        orders: [order[0]._id],
+                        lastMessage: 'Chat started',
+                        unreadBy: 'seller',
+                        isActive: true,
+                    });
+                } else {
+                    await Chat.updateOne(
+                        { _id: chat._id },
+                        {
+                            $addToSet: { orders: order[0]._id },
+                            $set: {
+                                lastMessage: 'New order created',
+                                unreadBy: 'seller',
+                                updatedAt: new Date()
+                            }
+                        }
+                    );
+                }
             }
 
             return res.status(200).json({ message: 'Order created successfully' });
