@@ -25,3 +25,20 @@
 .animate-marquee {
   animation: marquee 40s linear infinite;
 }
+
+/* Kitty animation */
+@keyframes kitty-fall {
+  0% {
+    transform: translate(-20px, -120px) rotate(0deg);
+  }
+  100% {
+    transform: translate(20px, 110vh) rotate(360deg);
+  }
+}
+
+
+.animate-kitty-fall {
+  animation-name: kitty-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
