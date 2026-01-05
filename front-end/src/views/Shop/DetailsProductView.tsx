@@ -48,7 +48,7 @@ export default function DetailsProductView() {
               <span className="text-blue-700 mr-2">Brand:</span>
               {product.brand}
             </p>
-            <h1 className="font-semibold font-montserrat text-3xl capitalize text-gray-600">
+            <h1 className="font-semibold font-montserrat text-3xl capitalize text-gray-600 line-clamp-7">
               {product.name}
             </h1>
           </div>

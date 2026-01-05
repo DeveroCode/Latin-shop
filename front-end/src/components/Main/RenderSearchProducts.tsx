@@ -24,7 +24,8 @@ export default function RenderSearchProducts() {
     return (
       <div className="flex-1 w-[80%] flex flex-col gap-6">
         {data.map((product) => (
-          <div
+          <Link
+            to={`/shop/product/${product._id}`}
             key={product._id}
             className="w-full border-gray-200 p-4 flex gap-6 border-y last-of-type:border-0"
           >
@@ -88,7 +89,7 @@ export default function RenderSearchProducts() {
                 Add to wishlist
               </button>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     );
