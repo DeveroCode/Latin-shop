@@ -34,7 +34,7 @@ export default function ProductsView() {
               {" "}
               <ClockArrowDown className="w-5 h-5" /> / Order List
             </span>
-            <OrderOptionsHeader />
+            <OrderOptionsHeader isEnable={isEnable} setIsEnable={setIsEnable} />
           </div>
           <Title>Products list</Title>
           <Subtitle>Here you can find all of your Products</Subtitle>
