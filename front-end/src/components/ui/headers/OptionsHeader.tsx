@@ -8,7 +8,7 @@ export default function OptionsHeader() {
   const [open, setOpen] = useState(false);
   const { data: user } = useUser();
   return (
-    <header className="flex justify-end items-center gap-6 px-28 pt-10">
+    <header className="flex justify-end items-center gap-6 px-6 pt-10">
       {user && <Notification id={user._id} open={open} setOpen={setOpen} />}
       <CircleQuestionMark size={24} className="text-gray-700" />
       <Link
