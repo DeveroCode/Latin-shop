@@ -10,12 +10,12 @@ export default function RequireAuth() {
         Loading...
       </div>
     );
-
-    if(!user){
-        toast.error("You must be logged in to access this page");
-        return <Navigate to="/login" replace />
-    }
-
-    return <Outlet />
   }
+
+  if (!user) {
+    toast.error("You must be logged in to access this page");
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
 }
