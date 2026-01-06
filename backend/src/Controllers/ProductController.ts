@@ -241,4 +241,22 @@ export class ProductController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  static removeToFavorites = async (req: Request, res: Response) => {
+    const { _id } = req.user
+    const { productId } = req.params
+    try {
+      const product = await Favorite.findOne({ user: _id, product: productId });
+      if (!product) {
+        const error = new Error("Product not found");
+        return res.status(404).json({ error: error.message });
+      }
+
+      await Favorite.findByIdAndDelete(product._id);
+      res.status(200).json({ message: 'Product removed from favorites successfully' });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }

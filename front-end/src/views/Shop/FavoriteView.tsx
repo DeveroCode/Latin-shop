@@ -1,7 +1,7 @@
 import { getFavorites } from "@/api/ProductsAPI";
 import CardFavorite from "@/components/ui/Cards/CardFavorite";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, HeartCrack } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function FavoriteView() {
@@ -27,8 +27,9 @@ export default function FavoriteView() {
         </section>
 
         {data.length === 0 ? (
-          <div className="text-center py-10">
-            <p className="text-gray-500 mb-4">Your cart is currently empty.</p>
+          <div className="text-center py-64 text-gray-500">
+            <HeartCrack className="w-20 h-20 mx-auto" />
+            <p className="mb-4">Your favorite list is currently empty.</p>
           </div>
         ) : (
           <section className="flex gap-2 justify-between">

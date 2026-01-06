@@ -5,6 +5,8 @@ import Logo from "../ui/Logo";
 import { toast } from "react-toastify";
 import { useUser } from "@/hooks/user";
 import { useShoppingStore } from "@/stores/shopping";
+import { useQuery } from "@tanstack/react-query";
+import type { Product } from "@/types/index";
 
 export default function Header() {
   const { cart } = useShoppingStore();
@@ -24,6 +26,11 @@ export default function Header() {
   if (errors.word) {
     toast.error(errors.word.message);
   }
+
+  const { data: favorites } = useQuery<Product[]>({
+    queryKey: ["favorites"],
+    enabled: !!user,
+  });
 
   const handleSendToSearch = ({ word }: { word: string }) => {
     if (word === currentWord) return;
@@ -78,9 +85,28 @@ export default function Header() {
       </form>
 
       <div id="actions" className="flex items-center justify-between gap-5">
-        <Link to="/shop/favorites" className="text-gray-600 hover:text-gray-800 transition-colors duration-200">
+        <Link
+          to="/shop/favorites"
+          className="relative text-gray-600 hover:text-gray-800 transition-colors duration-200"
+        >
           <Heart size={22} strokeWidth={2.5} />
+
+          {favorites && favorites.length > 0 && (
+            <span
+              className="
+        absolute -top-2 -right-2
+        bg-blue-900 text-white
+        text-[10px] font-bold
+        w-5 h-5
+        flex items-center justify-center
+        rounded-full
+      "
+            >
+              {favorites.length}
+            </span>
+          )}
         </Link>
+
         <Link
           to="/shop/my-cart"
           className="relative text-gray-600 hover:text-gray-800 transition-colors duration-200"

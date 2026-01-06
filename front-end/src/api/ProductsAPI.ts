@@ -64,6 +64,19 @@ export async function addToFavorites({ productId }: { productId: string }) {
         return [];
     }
 }
+
+export async function removeFromFavorites({ productId }: { productId: string }) {
+    try {
+        const { data } = await api.delete<ResponseMessage>(`/products/remove-favorites/${productId}`);
+        return data.message;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error);
+        }
+
+        return [];
+    }
+}
 export async function getFavorites() {
     try {
         const { data } = await api.get<Product[]>('/products/favorites');

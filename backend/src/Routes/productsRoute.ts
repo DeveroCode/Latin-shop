@@ -8,6 +8,7 @@ import { checkRoles } from "../Middlewares/CheckRoles";
 const router: Router = Router();
 router.post('/add-to-favorites/:productId', authenticate, toFavorites, handleInputErrors, ProductController.addToFavorites);
 router.get('/favorites', authenticate, ProductController.getToFavoites);
+router.delete('/remove-favorites/:productId', authenticate, toFavorites, handleInputErrors, ProductController.removeToFavorites);
 
 router.use(authenticate, checkRoles);
 router.get('', ProductController.getProducts);
