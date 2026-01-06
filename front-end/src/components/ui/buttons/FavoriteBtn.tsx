@@ -21,7 +21,7 @@ export default function FavoriteBtn({ id }: FavoriteBtnProps) {
     mutate({ productId: id });
   return (
     <button
-      className="border border-gray-300 hover:bg-gray-100 transition text-gray-700 py-2 rounded-lg font-medium"
+      className="border border-gray-300 hover:bg-gray-100 transition text-gray-700 py-2 rounded-lg font-medium cursor-pointer"
       onClick={() => handleAddToFavorites(id)}
     >
       Add to favorites
