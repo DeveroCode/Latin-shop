@@ -19,6 +19,7 @@ import CartItemsView from "./views/Shop/CartItemsView";
 import CreditAccountView from "./views/dashboard/settings/CreditAccountView";
 import OrdersView from "./views/dashboard/OrdersView";
 import ChatView from "./views/dashboard/ChatView";
+import Checkout from "./components/shop/Checkout";
 
 export default function AppRouter() {
   return (
@@ -30,6 +31,7 @@ export default function AppRouter() {
           <Route path="shop">
             <Route path="product/:id" element={<DetailsProductView />} />
             <Route path="my-cart" element={<CartItemsView />} />
+            <Route path="checkout" element={<Checkout />} />
           </Route>
         </Route>
         <Route path="/auth" element={<AuthLayout />}>
