@@ -52,6 +52,34 @@ export async function createProduct(formData: ProductFormData) {
         return [];
     }
 }
+export async function addToFavorites({ productId }: { productId: string }) {
+    try {
+        const { data } = await api.post<ResponseMessage>(`/products/add-to-favorites/${productId}`);
+        return data.message;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error);
+        }
+
+        return [];
+    }
+}
+export async function getFavorites() {
+    try {
+        const { data } = await api.get<Product[]>('/products/favorites');
+        const response = productSchema.safeParse(data);
+        if (response.success) {
+            return response.data;
+        }
+        return [];
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error);
+        }
+
+        return [];
+    }
+}
 
 type UploadImages = {
     files: File[],

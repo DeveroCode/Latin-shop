@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { searchProducts } from "@/api/ShopAPI";
 import { useShoppingStore } from "@/stores/shopping";
+import FavoriteBtn from "../ui/buttons/FavoriteBtn";
 export default function RenderSearchProducts() {
   const { setToCart } = useShoppingStore();
   const { word } = useParams();
@@ -24,8 +25,7 @@ export default function RenderSearchProducts() {
     return (
       <div className="flex-1 w-[80%] flex flex-col gap-6">
         {data.map((product) => (
-          <Link
-            to={`/shop/product/${product._id}`}
+          <div
             key={product._id}
             className="w-full border-gray-200 p-4 flex gap-6 border-y last-of-type:border-0"
           >
@@ -40,7 +40,7 @@ export default function RenderSearchProducts() {
             </div>
 
             {/* INFO */}
-            <div className="flex-1 flex flex-col gap-2">
+            <Link to={`/shop/product/${product._id}`} className="flex-1 flex flex-col gap-2">
               <p className="font-semibold text-gray-900 text-base line-clamp-2 capitalize">
                 {product.name}
               </p>
@@ -72,7 +72,7 @@ export default function RenderSearchProducts() {
                   {product.brand}
                 </span>
               </div>
-            </div>
+            </Link>
 
             {/* ACTIONS */}
             <div className="flex flex-col gap-3 min-w-[180px]">
@@ -85,11 +85,9 @@ export default function RenderSearchProducts() {
                 Add to cart
               </Link>
 
-              <button className="border border-gray-300 hover:bg-gray-100 transition text-gray-700 py-2 rounded-lg font-medium">
-                Add to wishlist
-              </button>
+             <FavoriteBtn id={product._id} />
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     );

@@ -78,9 +78,9 @@ export default function Header() {
       </form>
 
       <div id="actions" className="flex items-center justify-between gap-5">
-        <button className="text-gray-600 hover:text-gray-800 transition-colors duration-200">
+        <Link to="/shop/favorites" className="text-gray-600 hover:text-gray-800 transition-colors duration-200">
           <Heart size={22} strokeWidth={2.5} />
-        </button>
+        </Link>
         <Link
           to="/shop/my-cart"
           className="relative text-gray-600 hover:text-gray-800 transition-colors duration-200"

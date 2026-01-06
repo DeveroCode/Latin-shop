@@ -56,3 +56,10 @@ export const uploadImages = [
     .isArray({ min: 1, max: 4 })
     .withMessage("Images must be an array with between 1 and 4 items")
 ]
+export const toFavorites = [
+  param("productId")
+    .notEmpty()
+    .withMessage("Product ID is required")
+    .isString()
+    .withMessage("Product ID must be a string")
+]

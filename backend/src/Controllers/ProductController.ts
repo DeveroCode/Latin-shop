@@ -4,6 +4,7 @@ import Product from "../Models/Product";
 import Category from "../Models/Category";
 import formidable from "formidable";
 import cloudinary from "../config/cloudinary";
+import Favorite from "../Models/Favorite";
 
 
 export class ProductController {
@@ -18,7 +19,7 @@ export class ProductController {
 
       const product = new Product(req.body);
       await product.save();
-      res.status(201).json({ message: 'Product created successfully'});
+      res.status(201).json({ message: 'Product created successfully' });
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: 'Internal server error' });
@@ -26,52 +27,52 @@ export class ProductController {
   }
 
   static uploadImagesProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const form = formidable({ multiples: true });
+    const { id } = req.params;
+    const form = formidable({ multiples: true });
 
-  try {
-    form.parse(req, async (err, fields, files) => {
-      if (err) return res.status(400).json({ error: err.message });
+    try {
+      form.parse(req, async (err, fields, files) => {
+        if (err) return res.status(400).json({ error: err.message });
 
-      const product = await Product.findById(id);
-      if (!product) {
-        const error = new Error("Product not found");
-        return res.status(404).json({ error: error.message });
-      }
+        const product = await Product.findById(id);
+        if (!product) {
+          const error = new Error("Product not found");
+          return res.status(404).json({ error: error.message });
+        }
 
-      let fileArray: any[] = [];
+        let fileArray: any[] = [];
 
-      if (Array.isArray(files.images)) {
-        fileArray = files.images.filter(Boolean);
-      } else if (files.images) {
-        fileArray = [files.images];
-      }
+        if (Array.isArray(files.images)) {
+          fileArray = files.images.filter(Boolean);
+        } else if (files.images) {
+          fileArray = [files.images];
+        }
 
-      if (fileArray.length === 0) {
-        const error = new Error("No images provided");
-        return res.status(400).json({ error: error.message });
-      }
+        if (fileArray.length === 0) {
+          const error = new Error("No images provided");
+          return res.status(400).json({ error: error.message });
+        }
 
-      const uploadPromises = fileArray.map((file) =>
-        cloudinary.uploader.upload(file.filepath, {
-          public_id: uuid(),
-          folder: "products",
-        })
-      );
+        const uploadPromises = fileArray.map((file) =>
+          cloudinary.uploader.upload(file.filepath, {
+            public_id: uuid(),
+            folder: "products",
+          })
+        );
 
-      const results = await Promise.all(uploadPromises);
-      const imageUrls = results.map((r) => r.secure_url);
+        const results = await Promise.all(uploadPromises);
+        const imageUrls = results.map((r) => r.secure_url);
 
-      product.images = [...(product.images || []), ...imageUrls];
-      await product.save();
+        product.images = [...(product.images || []), ...imageUrls];
+        await product.save();
 
-      res.status(200).json({ message: "Images uploaded successfully" });
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+        res.status(200).json({ message: "Images uploaded successfully" });
+      });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
 
   static update = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -117,7 +118,7 @@ export class ProductController {
 
       product.enabled = enabled;
       await product.save();
-      if(enabled) {
+      if (enabled) {
         res.status(200).json({ message: 'Product enabled successfully' });
       } else {
         res.status(200).json({ message: 'Product disabled successfully' });
@@ -184,6 +185,57 @@ export class ProductController {
         return res.status(404).json({ message: 'Product not found' });
       }
       res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  static addToFavorites = async (req: Request, res: Response) => {
+    const { _id } = req.user
+    const { productId } = req.params
+    try {
+      const product = await Product.findById(productId);
+      const existFavorite = await Favorite.findOne({ user: _id, product: productId });
+      const findProductByUser = await Product.find({ user: _id });
+      const ownerProduct = findProductByUser.some(
+        findProductByUser => findProductByUser.user.toString() === _id
+      )
+      if (!product) {
+        const error = new Error("Product not found");
+        return res.status(404).json({ error: error.message });
+      } else if (ownerProduct) {
+        const error = new Error("You can't add your own product to favorites");
+        return res.status(404).json({ error: error.message });
+      } else if (existFavorite) {
+        const error = new Error("Product already added to favorites");
+        return res.status(404).json({ error: error.message });
+      }
+
+      await Favorite.create({ user: _id, product: productId });
+      res.status(200).json({ message: 'Product added to favorites successfully' });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  static getToFavoites = async (req: Request, res: Response) => {
+    const { _id } = req.user
+    try {
+      const favorites = await Favorite.find({ user: _id })
+        .populate({
+          path: 'product',
+          select: '-__v -createdAt -updatedAt',
+          populate: {
+            path: 'category',
+            select: '-__v -createdAt -updatedAt'
+          }
+        })
+        .select('-__v -createdAt -updatedAt -user -_id');
+
+      const products = favorites.map(fav => fav.product);
+      res.status(200).json(products);
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: 'Internal server error' });

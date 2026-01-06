@@ -21,6 +21,7 @@ import OrdersView from "./views/dashboard/OrdersView";
 import ChatView from "./views/dashboard/ChatView";
 import Checkout from "./components/shop/Checkout";
 import RequireAuth from "./middleware/RequireAuth";
+import FavoriteView from "./views/Shop/FavoriteView";
 
 export default function AppRouter() {
   return (
@@ -34,6 +35,7 @@ export default function AppRouter() {
             <Route element={<RequireAuth />}>
               <Route path="my-cart" element={<CartItemsView />} />
               <Route path="checkout" element={<Checkout />} />
+              <Route path="favorites" element={<FavoriteView />} />
             </Route>
           </Route>
         </Route>
