@@ -20,6 +20,7 @@ import CreditAccountView from "./views/dashboard/settings/CreditAccountView";
 import OrdersView from "./views/dashboard/OrdersView";
 import ChatView from "./views/dashboard/ChatView";
 import Checkout from "./components/shop/Checkout";
+import RequireAuth from "./middleware/RequireAuth";
 
 export default function AppRouter() {
   return (
@@ -31,7 +32,9 @@ export default function AppRouter() {
           <Route path="shop">
             <Route path="product/:id" element={<DetailsProductView />} />
             <Route path="my-cart" element={<CartItemsView />} />
-            <Route path="checkout" element={<Checkout />} />
+            <Route element={<RequireAuth />}>
+              <Route path="checkout" element={<Checkout />} />
+            </Route>
           </Route>
         </Route>
         <Route path="/auth" element={<AuthLayout />}>
@@ -39,21 +42,23 @@ export default function AppRouter() {
           <Route path="register" index element={<RegisterView />} />
         </Route>
         {/* Dashboard */}
-        <Route path="/dashboard" element={<DasboardLayout />}>
-          <Route index element={<Index />} />
-          <Route element={<RequireRoles roles={["seller"]} />}>
-            <Route path="products" element={<ProductsView />} />
-            <Route path="orders" element={<OrdersView />} />
-          </Route>
-           <Route path="customers" element={<ChatView />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/dashboard" element={<DasboardLayout />}>
+            <Route index element={<Index />} />
+            <Route element={<RequireRoles roles={["seller"]} />}>
+              <Route path="products" element={<ProductsView />} />
+              <Route path="orders" element={<OrdersView />} />
+            </Route>
+            <Route path="customers" element={<ChatView />} />
 
-          {/* Settings Section */}
-          <Route path="settings" element={<SettingsLayout />}>
-            <Route index element={<GeneralView />} />
-            <Route path="profile" element={<ProfileView />} />
-            <Route path="image-profile" element={<ImageProfileView />} />
-            <Route path="credit-account" element={<CreditAccountView />} />
-            <Route path="delete-account" element={<DeleteAccountView />} />
+            {/* Settings Section */}
+            <Route path="settings" element={<SettingsLayout />}>
+              <Route index element={<GeneralView />} />
+              <Route path="profile" element={<ProfileView />} />
+              <Route path="image-profile" element={<ImageProfileView />} />
+              <Route path="credit-account" element={<CreditAccountView />} />
+              <Route path="delete-account" element={<DeleteAccountView />} />
+            </Route>
           </Route>
         </Route>
       </Routes>
