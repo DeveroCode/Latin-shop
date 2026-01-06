@@ -1,9 +1,9 @@
 import { getTenProducts } from "@/api/ProductsAPI";
 import { formatCurrency } from "@/utils/index";
 import { useQuery } from "@tanstack/react-query";
-import { Heart } from "lucide-react";
 import Rating from "../ui/Rating";
 import { Link } from "react-router-dom";
+import FavoriteHeartBtn from "../ui/buttons/FavoriteHeartBtn";
 
 export default function TenProducts() {
   const { data, isLoading } = useQuery({
@@ -19,7 +19,8 @@ export default function TenProducts() {
     return (
       <div className="flex items-center justify-center sm:justify-between gap-6 sm:gap-8 flex-wrap mt-10">
         {data.map((product) => (
-          <Link to={`/shop/product/${product._id}`}
+          <Link
+            to={`/shop/product/${product._id}`}
             key={product._id}
             className="
           relative group border border-gray-200 shadow bg-gray-50
@@ -30,17 +31,7 @@ export default function TenProducts() {
           hover:scale-[1.03]
         "
           >
-            <button
-              className="
-            absolute top-2 right-2 text-gray-400 hover:text-red-500
-            opacity-0 group-hover:opacity-100 transition-all duration-300
-            transform group-hover:scale-110
-          "
-              aria-label="Add to favorites"
-            >
-              <Heart className="w-5 h-5" />
-            </button>
-
+            <FavoriteHeartBtn id={product._id} />
             <picture className="w-full h-32 sm:h-36 md:h-40 flex items-center justify-center">
               <img
                 src={product.images[2]}

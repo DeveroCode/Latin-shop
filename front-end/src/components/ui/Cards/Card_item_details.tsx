@@ -1,8 +1,9 @@
-import { Minus, Plus, Trash2, Bookmark } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import type { ProductCartItem } from "@/types/index";
 import { useShoppingStore } from "@/stores/shopping";
 import { formatCurrency } from "@/utils/index";
 import { Link } from "react-router-dom";
+import FavoriteHeartBtn from "../buttons/FavoriteHeartBtn";
 
 type Card_item_detailsProps = {
   item: ProductCartItem;
@@ -39,9 +40,7 @@ export default function Card_item_details({ item }: Card_item_detailsProps) {
               Remove
             </button>
 
-            <button className="hover:text-gray-700 transition cursor-pointer">
-              <Bookmark className="w-4 h-4" />
-            </button>
+            <FavoriteHeartBtn id={item._id} />
           </div>
         </div>
       </div>
