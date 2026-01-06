@@ -14,7 +14,7 @@ export default function RequireAuth() {
 
   if (!user) {
     toast.error("You must be logged in to access this page");
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth/login" replace />;
   }
 
   return <Outlet />;
