@@ -31,8 +31,8 @@ export default function AppRouter() {
           <Route path="/search/:word" element={<SearchView />} />
           <Route path="shop">
             <Route path="product/:id" element={<DetailsProductView />} />
-            <Route path="my-cart" element={<CartItemsView />} />
             <Route element={<RequireAuth />}>
+              <Route path="my-cart" element={<CartItemsView />} />
               <Route path="checkout" element={<Checkout />} />
             </Route>
           </Route>

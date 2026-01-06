@@ -16,13 +16,12 @@ export default function CartItemsView() {
         Shopping Cart
       </div>
 
-      {cart.length === 0 && (
+      {cart.length === 0 ? (
         <div className="text-center py-10">
           <p className="text-gray-500 mb-4">Your cart is currently empty.</p>
         </div>
-      )}
-
-      <section className="flex gap-2 justify-between">
+      ) : (
+         <section className="flex gap-2 justify-between">
         {/* Table */}
         <div className="py-10 w-[70%]">
           <p className="text-lg text-gray-700 border-b border-gray-200 pb-2">
@@ -53,6 +52,7 @@ export default function CartItemsView() {
           <OrderSummary />
         </div>
       </section>
+      )}
     </div>
   );
 }
