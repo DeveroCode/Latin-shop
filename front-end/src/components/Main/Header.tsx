@@ -4,13 +4,15 @@ import { useForm } from "react-hook-form";
 import Logo from "../ui/Logo";
 import { toast } from "react-toastify";
 import { useUser } from "@/hooks/user";
+import { useShoppingStore } from "@/stores/shopping";
 
 export default function Header() {
+  const { cart } = useShoppingStore();
   const navigate = useNavigate();
   const location = useLocation();
   const { word: currentWord } = useParams();
   const initialValues = { word: currentWord || "" };
-  const {data: user} = useUser();
+  const { data: user } = useUser();
   const {
     register,
     handleSubmit,
@@ -28,7 +30,7 @@ export default function Header() {
     navigate(`/search/${word}`);
 
     if (location.pathname === "/") {
-     word = "";
+      word = "";
     }
   };
 
@@ -79,8 +81,26 @@ export default function Header() {
         <button className="text-gray-600 hover:text-gray-800 transition-colors duration-200">
           <Heart size={22} strokeWidth={2.5} />
         </button>
-        <Link to="/shop/my-cart" className="text-gray-600 hover:text-gray-800 transition-colors duration-200">
+        <Link
+          to="/shop/my-cart"
+          className="relative text-gray-600 hover:text-gray-800 transition-colors duration-200"
+        >
           <ShoppingBag size={22} strokeWidth={2.5} />
+
+          {cart.length > 0 && (
+            <span
+              className="
+        absolute -top-2 -right-2
+        bg-blue-900 text-white
+        text-[10px] font-bold
+        w-5 h-5
+        flex items-center justify-center
+        rounded-full
+      "
+            >
+              {cart.length}
+            </span>
+          )}
         </Link>
 
         <div className="flex items-center gap-2">
@@ -90,9 +110,13 @@ export default function Header() {
               User
             </Link>
             {user ? (
-              <Link to="/dashboard" className="font-semibold capitalize">{user?.name} {user?.last_name}</Link>
+              <Link to="/dashboard" className="font-semibold capitalize">
+                {user?.name} {user?.last_name}
+              </Link>
             ) : (
-              <span className="font-semibold capitalize">Login or Register</span>
+              <span className="font-semibold capitalize">
+                Login or Register
+              </span>
             )}
           </div>
         </div>
